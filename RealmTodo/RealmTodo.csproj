@@ -63,6 +63,12 @@
 	  <Compile Update="Views\TimerPage.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
+	  <Compile Update="Views\UserRecordViews\EditUserRecordPage.xaml.cs">
+	    <DependentUpon>EditUserRecordPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\UserRecordViews\UserRecordsPage.xaml.cs">
+	    <DependentUpon>UserRecordsPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<MauiXaml Update="Views\TimerPage.xaml">
@@ -81,6 +87,14 @@
 		</MauiXaml>
 		<MauiXaml Update="Views\NewEditItemPage.xaml">
 		  <SubType></SubType>
+		</MauiXaml>
+		<MauiXaml Update="Views\UserRecordViews\EditUserRecordPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\UserRecordViews\UserRecordsPage.xaml">
+		  <SubType>
+			</SubType>
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 </Project>

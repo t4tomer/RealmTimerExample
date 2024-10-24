@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="RealmTodo.Views.EditItemPage"
+             x:Class="RealmTodo.Views.EditUserRecordPage"
              xmlns:vm="clr-namespace:RealmTodo.ViewModels"
-             Title="Create or Modify an Item"
+             Title="C99reate or Modify an Item"
                 >
      <ContentPage.BindingContext>
         <vm:EditItemViewModel />

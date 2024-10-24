@@ -1,0 +1,133 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using RealmTodo.Models;
+using RealmTodo.Services;
+using RealmTodo.Views;
+
+using Realms;
+using System.Windows.Input;
+
+namespace RealmTodo.ViewModels
+{
+    public partial class UserRecordViewModel : BaseViewModel
+    {
+        [ObservableProperty]
+        private string connectionStatusIcon = "wifi_on.png";
+
+        [ObservableProperty]
+        private bool isShowAllUserRecords;
+
+        [ObservableProperty]
+        private IQueryable<UserRecord> user_records;
+
+        [ObservableProperty]
+        public string dataExplorerLink = RealmService.DataExplorerLink;
+
+        private Realm realm;
+        private string currentUserId;
+        private bool isOnline = true;
+        public ICommand NavigateCommand { get; private set; }
+
+
+        [RelayCommand]
+        public void OnAppearing()
+        {
+            realm = RealmService.GetMainThreadRealm();
+            currentUserId = RealmService.CurrentUser.Id;
+            user_records = realm.All<UserRecord>().OrderBy(i => i.Id);
+
+            var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
+            isShowAllUserRecords = currentSubscriptionType == SubscriptionType.All;
+        }
+
+        [RelayCommand]
+        public async Task Logout()
+        {
+            IsBusy = true;
+            await RealmService.LogoutAsync();
+            IsBusy = false;
+
+            await Shell.Current.GoToAsync($"//login");
+        }
+
+        [RelayCommand]
+        public async Task AddUserRecord()
+        {
+            await Shell.Current.GoToAsync($"UserRecordEdit");
+        }
+
+        [RelayCommand]
+        public async Task ToTimerPage()
+        {
+            // Navigate to the singleton instance of MapPage
+            var timerPage = TimerPage.Instance;
+            await Shell.Current.Navigation.PushAsync(timerPage);            
+        }
+
+
+
+
+
+        [RelayCommand]
+        public async Task EditUserRecord(UserRecord UserRecord)
+        {
+            if (!await CheckUserRecordOwnership(UserRecord))
+            {
+                return;
+            }
+            var UserRecordParameter = new Dictionary<string, object>() { { "UserRecord", UserRecord } };
+            await Shell.Current.GoToAsync($"UserRecordEdit", UserRecordParameter);
+        }
+
+        [RelayCommand]
+        public async Task DeleteUserRecord(UserRecord UserRecord)
+        {
+            if (!await CheckUserRecordOwnership(UserRecord))
+            {
+                return;
+            }
+
+            await realm.WriteAsync(() =>
+            {
+                realm.Remove(UserRecord);
+            });
+        }
+
+        [RelayCommand]
+        public void ChangeConnectionStatus()
+        {
+            isOnline = !isOnline;
+
+            if (isOnline)
+            {
+                realm.SyncSession.Start();
+            }
+            else
+            {
+                realm.SyncSession.Stop();
+            }
+
+            ConnectionStatusIcon = isOnline ? "wifi_on.png" : "wifi_off.png";
+        }
+
+        [RelayCommand]
+        public async Task UrlTap(string url)
+        {
+            await Launcher.OpenAsync(DataExplorerLink);
+        }
+
+        private async Task<bool> CheckUserRecordOwnership(UserRecord UserRecord)
+        {
+            if (!UserRecord.IsMine)
+            {
+                await DialogService.ShowAlertAsync("Error", "You cannot modify UserRecords not belonging to you", "OK");
+                return false;
+            }
+
+            return true;
+        }
+
+
+    }
+}
+
