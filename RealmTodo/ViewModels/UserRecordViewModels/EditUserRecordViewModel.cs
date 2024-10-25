@@ -27,9 +27,9 @@ namespace RealmTodo.ViewModels
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            if (query.Count > 0 && query["UserRecord"] != null) // Editing an existing UserRecord
+            if (query.Count > 0 && query["userrecord"] != null) // Editing an existing UserRecord
             {
-                InitialUserRecord = query["UserRecord"] as UserRecord;
+                InitialUserRecord = query["userrecord"] as UserRecord;
 
                 Summary = InitialUserRecord.Summary;
                 MapName = InitialUserRecord.MapName;

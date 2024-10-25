@@ -34,10 +34,10 @@ namespace RealmTodo.ViewModels
         {
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            user_records = realm.All<UserRecord>().OrderBy(i => i.Id);
+            User_records = realm.All<UserRecord>().OrderBy(i => i.Id);
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
-            isShowAllUserRecords = currentSubscriptionType == SubscriptionType.All;
+            IsShowAllUserRecords = currentSubscriptionType == SubscriptionType.All;
         }
 
         [RelayCommand]
@@ -53,7 +53,7 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddUserRecord()
         {
-            await Shell.Current.GoToAsync($"UserRecordEdit");
+            await Shell.Current.GoToAsync($"userRecordEdit");
         }
 
         [RelayCommand]
@@ -69,27 +69,27 @@ namespace RealmTodo.ViewModels
 
 
         [RelayCommand]
-        public async Task EditUserRecord(UserRecord UserRecord)
+        public async Task EditUserRecord(UserRecord userRecord)
         {
-            if (!await CheckUserRecordOwnership(UserRecord))
+            if (!await CheckUserRecordOwnership(userRecord))
             {
                 return;
             }
-            var UserRecordParameter = new Dictionary<string, object>() { { "UserRecord", UserRecord } };
-            await Shell.Current.GoToAsync($"UserRecordEdit", UserRecordParameter);
+            var userRecordParameter = new Dictionary<string, object>() { { "userRecord", userRecord } };
+            await Shell.Current.GoToAsync($"userRecordEdit", userRecordParameter);
         }
 
         [RelayCommand]
-        public async Task DeleteUserRecord(UserRecord UserRecord)
+        public async Task DeleteUserRecord(UserRecord userRecord)
         {
-            if (!await CheckUserRecordOwnership(UserRecord))
+            if (!await CheckUserRecordOwnership(userRecord))
             {
                 return;
             }
 
             await realm.WriteAsync(() =>
             {
-                realm.Remove(UserRecord);
+                realm.Remove(userRecord);
             });
         }
 

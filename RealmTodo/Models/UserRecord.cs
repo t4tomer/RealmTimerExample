@@ -4,7 +4,7 @@ using RealmTodo.Services;
 
 namespace RealmTodo.Models
 {
-    public partial class UserRecord : IRealmObject
+    public partial class UserRecord : IRealmObject, IOwned
     {
         [PrimaryKey]
         [MapTo("_id")]
