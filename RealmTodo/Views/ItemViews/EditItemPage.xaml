@@ -16,7 +16,9 @@
             TextColor="{DynamicResource Primary}"/>
         <Entry Text="{Binding Summary}" Placeholder="Item Summary"  PlaceholderColor="#787878"/>
         <HorizontalStackLayout HorizontalOptions="Center" >
-            <Button  Margin="0,0,20,0" Text="OK" Command="{Binding SaveItemCommand}"/>
+            <!-- TODO this new method that adds Dog object to realm -->
+
+            <Button  Margin="0,0,20,0" Text="OK" Command="{Binding AddDogCommand}"/>
             <Button  BackgroundColor="#454556"
                     Text="Cancel" Command="{Binding CancelCommand}"/>
         </HorizontalStackLayout>

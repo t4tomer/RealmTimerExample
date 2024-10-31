@@ -2,6 +2,10 @@
 using CommunityToolkit.Mvvm.Input;
 using RealmTodo.Models;
 using RealmTodo.Services;
+using System.Text.Json;
+using Realms;
+using Realms.Sync;
+using RealmTodo.Models;
 
 namespace RealmTodo.ViewModels
 {
@@ -15,6 +19,80 @@ namespace RealmTodo.ViewModels
 
         [ObservableProperty]
         private string pageHeader;
+
+        private static Realms.Sync.App app;
+
+        private string currentUserId = RealmService.CurrentUser.Id;
+
+
+        [RelayCommand]
+        public async Task AddDog()
+        {
+            app = Realms.Sync.App.Create("atlastest-qmfoisb"); // Replace with your Realm App ID
+            Console.WriteLine("Realm App initialized successfully.");
+
+            // Ensure the app and user are properly initialized
+            if (app == null)
+            {
+                Console.WriteLine("Error: Realm app is not initialized.");
+                return;
+            }
+
+
+            var config = new FlexibleSyncConfiguration(app.CurrentUser)
+            {
+                PopulateInitialSubscriptions = (realm) =>
+                {
+                    // Subscribe to all Dog objects, or apply a valid filter.
+                    var myItems = realm.All<Dog>().Where(d => d.Age > 5);
+                    realm.Subscriptions.Add(myItems);
+                }
+            };
+
+            // Get Realm instance
+            var realm = await Realm.GetInstanceAsync(config);
+            Console.WriteLine("Realm instance created successfully.");
+
+            // Update subscriptions
+            realm.Subscriptions.Update(() =>
+            {
+                var myDogs = realm.All<Dog>().Where(t => t.Name == "Clifford" && t.Age > 5);
+                if (myDogs.Any())
+                {
+                    realm.Subscriptions.Add(myDogs);
+                    Console.WriteLine("Subscription added.");
+                }
+                else
+                {
+                    Console.WriteLine("Warning: No matching dogs found for subscription.");
+                }
+            });
+
+            await realm.Subscriptions.WaitForSynchronizationAsync();
+            Console.WriteLine("Subscription synchronized successfully.");
+
+            // Write block to add a new Dog object
+            realm.Write(() =>
+            {
+                var newDog = new Dog { Name = "Clifford", Age = 10 };
+                Console.WriteLine($"Adding dog: {newDog.Name}, Age: {newDog.Age}");
+                realm.Add(newDog);
+                Console.WriteLine("Dog added successfully.");
+            });
+
+            // Verify that the dog was added
+            var dogs = realm.All<Dog>().ToList();
+            Console.WriteLine($"Total dogs in database: {dogs.Count}");
+        }
+
+
+
+
+
+
+
+
+
 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
