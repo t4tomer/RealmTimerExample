@@ -123,19 +123,20 @@ namespace RealmTodo.Services
             };
         }
 
-        private static (IQueryable<Item> Query, string Name) GetQueryForSubscriptionType(Realm realm, SubscriptionType subType)
+        // new method-used for adding Dog class 
+        private static (IQueryable<Dog> Query, string Name) GetQueryForSubscriptionType(Realm realm, SubscriptionType subType)
         {
-            IQueryable<Item> query = null;
+            IQueryable<Dog> query = null;
             string queryName = null;
 
             if (subType == SubscriptionType.Mine)
             {
-                query = realm.All<Item>().Where(i => i.OwnerId == CurrentUser.Id);
+                query = realm.All<Dog>().Where(i => i.OwnerId == CurrentUser.Id);
                 queryName = "mine";
             }
             else if (subType == SubscriptionType.All)
             {
-                query = realm.All<Item>();
+                query = realm.All<Dog>();
                 queryName = "all";
             }
             else

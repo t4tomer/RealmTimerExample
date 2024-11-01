@@ -18,7 +18,7 @@
         <HorizontalStackLayout HorizontalOptions="Center" >
             <!-- TODO this new method that adds Dog object to realm -->
 
-            <Button  Margin="0,0,20,0" Text="OK" Command="{Binding AddDogCommand}"/>
+            <Button  Margin="0,0,20,0" Text="OK" Command="{Binding SaveDogCommand}"/>
             <Button  BackgroundColor="#454556"
                     Text="Cancel" Command="{Binding CancelCommand}"/>
         </HorizontalStackLayout>
