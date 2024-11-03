@@ -2,6 +2,7 @@ using System.Text.Json;
 using Realms;
 using Realms.Sync;
 using RealmTodo.Models;
+using static Realms.Schema.ObjectSchema;
 
 namespace RealmTodo.Services
 {
@@ -48,12 +49,21 @@ namespace RealmTodo.Services
             Console.WriteLine($"To view your data in Atlas, use this link: {DataExplorerLink}");
         }
 
-        public static Realm GetMainThreadRealm()
+        public static Realm GetMainThreadRealm(Object newObject)
         {
-            return mainThreadRealm ??= GetRealm();
+            Object d1 = new Dog();
+            Dog newDog = new Dog();
+            Item newItem = new Item();
+            if (d1 is Dog)
+                Console.WriteLine($"object is of type dog ");
+            else
+                Console.WriteLine($"object is not of type dog ");
+
+
+            return mainThreadRealm ??= GetRealm(newItem);
         }
 
-        public static Realm GetRealm()
+        public static Realm GetRealm(object ObjectType)
         {
             var config = new FlexibleSyncConfiguration(app.CurrentUser)
             {
@@ -77,7 +87,9 @@ namespace RealmTodo.Services
             await app.LogInAsync(Credentials.EmailPassword(email, password));
 
             //This will populate the initial set of subscriptions the first time the realm is opened
-            using var realm = GetRealm();
+            var newItem = new Item();
+
+            using var realm = GetRealm(newItem);
             await realm.Subscriptions.WaitForSynchronizationAsync();
         }
 

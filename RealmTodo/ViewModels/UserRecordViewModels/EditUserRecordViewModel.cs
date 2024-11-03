@@ -53,8 +53,8 @@ namespace RealmTodo.ViewModels
         {
 
             Console.WriteLine($"SaveUserRecord method!!!");
-
-            var realm = RealmService.GetMainThreadRealm();
+            UserRecord userRecord = new UserRecord();
+            var realm = RealmService.GetMainThreadRealm(userRecord);
             await realm.WriteAsync(() =>
             {
                 if (InitialUserRecord != null) // Editing existing UserRecord

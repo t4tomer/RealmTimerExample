@@ -32,7 +32,8 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
-            realm = RealmService.GetMainThreadRealm();
+            Item newItem = new Item();
+            realm = RealmService.GetMainThreadRealm(newItem);
             currentUserId = RealmService.CurrentUser.Id;
             Items = realm.All<Item>().OrderBy(i => i.Id);
 

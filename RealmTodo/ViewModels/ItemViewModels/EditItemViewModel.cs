@@ -123,7 +123,8 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task SaveDog()
         {
-            var realm = RealmService.GetMainThreadRealm();
+            Dog newDog = new Dog();
+            var realm = RealmService.GetMainThreadRealm(newDog);
             await realm.WriteAsync(() =>
             {
                 if (InitialDog != null) // editing an item
@@ -170,7 +171,8 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task SaveItem()
         {
-            var realm = RealmService.GetMainThreadRealm();
+            Item newItem = new Item();
+            var realm = RealmService.GetMainThreadRealm(newItem);
             await realm.WriteAsync(() =>
             {
                 if (InitialItem != null) // editing an item

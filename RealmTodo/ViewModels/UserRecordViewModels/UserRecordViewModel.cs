@@ -6,6 +6,7 @@ using RealmTodo.Views;
 
 using Realms;
 using System.Windows.Input;
+//using AddressBookUI;
 
 namespace RealmTodo.ViewModels
 {
@@ -32,7 +33,8 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
-            realm = RealmService.GetMainThreadRealm();
+            Item newItem = new Item();
+            realm = RealmService.GetMainThreadRealm(newItem);
             currentUserId = RealmService.CurrentUser.Id;
             User_records = realm.All<UserRecord>().OrderBy(i => i.Id);
 
