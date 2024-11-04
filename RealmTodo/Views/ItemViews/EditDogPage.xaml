@@ -6,7 +6,7 @@
              Title="Add Dog to cloud"
                 >
     <ContentPage.BindingContext>
-        <vm:EditItemViewModel />
+        <vm:EditDogViewModel />
     </ContentPage.BindingContext>
     <VerticalStackLayout Padding="10" Spacing="20">
         <Label 

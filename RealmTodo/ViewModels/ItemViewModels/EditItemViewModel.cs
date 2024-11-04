@@ -63,7 +63,7 @@ namespace RealmTodo.ViewModels
          //ApplyQueryAttributes -item class
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
-            Console.WriteLine($"-->ApplyQueryAttributes method (EditITemViewModel)");
+            Console.WriteLine($"-->ApplyQueryAttributes method (EditItemViewModel)");
 
             if (query.Count > 0 && query["item"] != null) // we're editing an Item
             {

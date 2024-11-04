@@ -54,13 +54,19 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddItem()
         {
+            Console.WriteLine($"-->AddItem (ItemsViewModel)");
+
             await Shell.Current.GoToAsync($"itemEdit");
         }
 
         [RelayCommand]
         public async Task AddDog()
         {
+            Console.WriteLine($"-->AddDog (ItemsViewModel)");
+
             await Shell.Current.GoToAsync($"dogEdit");
+            //var editDogPage = new EditDogPage();
+            //await Shell.Current.Navigation.PushAsync(editDogPage);
         }
 
 

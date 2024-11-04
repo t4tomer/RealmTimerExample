@@ -44,6 +44,8 @@ namespace RealmTodo.ViewModels
         //// ApplyQueryAttributes-dog class 
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
+            Console.WriteLine($"-->ApplyQueryAttributes method (EditDogViewModel)");
+
             if (query.Count > 0 && query["dog"] != null) // we're editing an Item
             {
                 InitialDog = query["dog"] as Dog;
@@ -69,6 +71,8 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task SaveDog()
         {
+            Console.WriteLine($"-->SaveDog method (EditDogViewModel)");
+
             Dog newDog = new Dog();
             var realm = RealmService.GetMainThreadRealm(newDog);
             await realm.WriteAsync(() =>

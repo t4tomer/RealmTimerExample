@@ -63,7 +63,7 @@ namespace RealmTodo.Services
             //else
             //    Console.WriteLine($"object is not of type dog ");
 
-
+            //TODO need to understand why newObject is crashing the app.
             return mainThreadRealm ??= GetRealm(inputObject);
         }
 
