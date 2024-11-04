@@ -79,16 +79,19 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+
+        <!-- Regular size "Add new Item" button -->
         <Border BackgroundColor="White"
                 StrokeThickness="0"
                 Padding="8" 
                 Grid.Row="2">
             <Button
-                Margin="-2"
                 Text="Add new Item"
                 FontSize="17"
                 Command="{Binding AddItemCommand}" />
         </Border>
+
         <!-- Red Button instead of FormattedString -->
         <Frame Grid.Row="3" Padding="10" BorderColor="Black" BackgroundColor="#E3FCF7" Margin="5">
             <Button     Margin="0"
@@ -103,10 +106,17 @@
                         BackgroundColor="Yellow"
                     />
         </Frame>
+        
+        <!-- Add dog to mongo db -->
         <Frame Grid.Row="4" Padding="10" BorderColor="Black" BackgroundColor="#E3FCF7" Margin="5">
-            <Label Text="HINT: Log in with the same account on another device or simulator to see your list sync in real-time"
-                   FontSize="Micro"
-                   HorizontalTextAlignment="Center"/>
+            <Button
+                Text="Add new Dog"
+                FontSize="15"          
+                HeightRequest="40"
+                Padding="2"
+                Command="{Binding AddDogCommand}"
+                BackgroundColor="Black"/>
+
         </Frame>
     </Grid>
 </ContentPage>

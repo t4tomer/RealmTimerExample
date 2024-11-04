@@ -18,6 +18,9 @@ namespace RealmTodo.Services
 
         public static string DataExplorerLink;
 
+        //type of object that is uploaded to the mongodb cloud
+        public static Object inputObject = new Item();
+
         public static async Task Init()
         {
             if (serviceInitialised)
@@ -51,28 +54,47 @@ namespace RealmTodo.Services
 
         public static Realm GetMainThreadRealm(Object newObject)
         {
-            Object d1 = new Dog();
-            Dog newDog = new Dog();
-            Item newItem = new Item();
-            if (d1 is Dog)
-                Console.WriteLine($"object is of type dog ");
-            else
-                Console.WriteLine($"object is not of type dog ");
+
+            //Object d1 = new Dog();
+            //Dog newDog = new Dog();
+            //Item newItem = new Item();
+            ////if (d1 is Dog)
+            //    Console.WriteLine($"object is of type dog ");
+            //else
+            //    Console.WriteLine($"object is not of type dog ");
 
 
-            return mainThreadRealm ??= GetRealm(newItem);
+            return mainThreadRealm ??= GetRealm(inputObject);
         }
 
         public static Realm GetRealm(object ObjectType)
         {
-            var config = new FlexibleSyncConfiguration(app.CurrentUser)
+
+            var config = new FlexibleSyncConfiguration(app.CurrentUser);
+            if (ObjectType is Dog)
             {
-                PopulateInitialSubscriptions = (realm) =>
+                Console.WriteLine($"Adding Dog object to realm");
+                config = new FlexibleSyncConfiguration(app.CurrentUser)
                 {
-                    var (query, queryName) = GetQueryForSubscriptionType(realm, SubscriptionType.Mine);
-                    realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
-                }
-            };
+                    PopulateInitialSubscriptions = (realm) =>
+                    {
+                        var (query, queryName) = GetQueryForSubscriptionDogType(realm, SubscriptionType.Mine);
+                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+                    }
+                };
+            }
+            else if (ObjectType is Item)
+            {
+                Console.WriteLine($"Adding Item object to realm");
+                config = new FlexibleSyncConfiguration(app.CurrentUser)
+                {
+                    PopulateInitialSubscriptions = (realm) =>
+                    {
+                        var (query, queryName) = GetQueryForSubscriptionItemType(realm, SubscriptionType.Mine);
+                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+                    }
+                };
+            }
 
             return Realm.GetInstance(config);
         }
@@ -87,9 +109,11 @@ namespace RealmTodo.Services
             await app.LogInAsync(Credentials.EmailPassword(email, password));
 
             //This will populate the initial set of subscriptions the first time the realm is opened
-            var newItem = new Item();
+            //Item newItem = new Item();
+            //Dog newDog = new Dog();
 
-            using var realm = GetRealm(newItem);
+
+            using var realm = GetRealm(inputObject);
             await realm.Subscriptions.WaitForSynchronizationAsync();
         }
 
@@ -111,7 +135,7 @@ namespace RealmTodo.Services
             {
                 realm.Subscriptions.RemoveAll(true);
 
-                var (query, queryName) = GetQueryForSubscriptionType(realm, subType);
+                var (query, queryName) = GetQueryForSubscriptionDogType(realm, subType);
 
                 realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
             });
@@ -135,8 +159,41 @@ namespace RealmTodo.Services
             };
         }
 
+        // new method-used for adding Item class 
+        private static (IQueryable<Item> Query, string Name) GetQueryForSubscriptionItemType(Realm realm, SubscriptionType subType)
+        {
+            IQueryable<Item> query = null;
+            string queryName = null;
+
+            if (subType == SubscriptionType.Mine)
+            {
+                query = realm.All<Item>().Where(i => i.OwnerId == CurrentUser.Id);
+                queryName = "mine";
+            }
+            else if (subType == SubscriptionType.All)
+            {
+                query = realm.All<Item>();
+                queryName = "all";
+            }
+            else
+            {
+                throw new ArgumentException("Unknown subscription type");
+            }
+
+            return (query, queryName);
+        }
+
+
+
+
+
+
+
+
+
+
         // new method-used for adding Dog class 
-        private static (IQueryable<Dog> Query, string Name) GetQueryForSubscriptionType(Realm realm, SubscriptionType subType)
+        private static (IQueryable<Dog> Query, string Name) GetQueryForSubscriptionDogType(Realm realm, SubscriptionType subType)
         {
             IQueryable<Dog> query = null;
             string queryName = null;

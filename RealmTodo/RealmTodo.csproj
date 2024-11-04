@@ -60,6 +60,9 @@
 		<Folder Include="Services\" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Views\ItemViews\EditDogPage.xaml.cs">
+	    <DependentUpon>EditDogPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\TimerPage.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
@@ -71,6 +74,9 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+		<MauiXaml Update="Views\ItemViews\EditDogPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\TimerPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
