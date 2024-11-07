@@ -19,7 +19,13 @@ namespace RealmTodo.Services
         public static string DataExplorerLink;
 
         //type of object that is uploaded to the mongodb cloud
-        public static Object inputObject = new Item();
+        public static Object inputObject = new Item();//orignal code line
+
+        //public static ObjectSingleton newObject2 = ObjectSingleton.Instance;
+        //public static Object inputObject = newObject2.GetCurrentObjectType();
+
+
+
 
         public static async Task Init()
         {
@@ -55,22 +61,32 @@ namespace RealmTodo.Services
         public static Realm GetMainThreadRealm(Object newObject)
         {
 
-            //Object d1 = new Dog();
-            //Dog newDog = new Dog();
-            //Item newItem = new Item();
-            ////if (d1 is Dog)
-            //    Console.WriteLine($"object is of type dog ");
-            //else
-            //    Console.WriteLine($"object is not of type dog ");
 
-            //TODO need to understand why newObject is crashing the app.
+
+            if (inputObject is Dog)
+                Console.WriteLine($"inputObject is Dog ");
+            else
+                Console.WriteLine($"inputObject is Item ");
+
+
+
+          
+
+            
             return mainThreadRealm ??= GetRealm(inputObject);
+
         }
 
         public static Realm GetRealm(object ObjectType)
         {
 
             var config = new FlexibleSyncConfiguration(app.CurrentUser);
+
+            if (ObjectType is Dog)
+                Console.WriteLine($"(GetRealm method)ObjectType is Dog ");
+            else
+                Console.WriteLine($"(GetRealm method)ObjectType is Item ");
+
             if (ObjectType is Dog)
             {
                 Console.WriteLine($"Adding Dog object to realm");

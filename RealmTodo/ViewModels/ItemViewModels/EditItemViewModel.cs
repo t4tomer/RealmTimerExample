@@ -81,53 +81,17 @@ namespace RealmTodo.ViewModels
 
 
 
-
-
-
-
-
-        [RelayCommand]
-        public async Task SaveDog()
-        {
-            Dog newDog = new Dog();
-            var realm = RealmService.GetMainThreadRealm(newDog);
-            await realm.WriteAsync(() =>
-            {
-                if (InitialDog != null) // editing an item
-                {
-                    //InitialItem.Summary = Summary;
-                    InitialDog.Name = Name;
-                    InitialDog.Age = Age;
-                }
-                else // creating a new item
-                {
-                    realm.Add(new Dog()
-                    {
-                        OwnerId = RealmService.CurrentUser.Id,
-                        Name = summary,
-                        Age = 0
-                    });
-                }
-            });
-
-            // If you're getting this app code by cloning the repository at
-            // https://github.com/mongodb/template-app-maui-todo, 
-            // it does not contain the data explorer link. Download the
-            // app template from the Atlas UI to view a link to your data.
-            Console.WriteLine($"To view your data in Atlas, use this link: {RealmService.DataExplorerLink}");
-            await Shell.Current.GoToAsync("..");
-        }
-
-
-
         [RelayCommand]
         public async Task SaveItem()
         {
             Console.WriteLine($"-->SaveItem method (EditITemViewModel)");
 
-
+            ObjectSingleton newObject = ObjectSingleton.Instance;
+            object itemType = new Item();
+            newObject.SetObjectType(itemType);
             Item newItem = new Item();
-            var realm = RealmService.GetMainThreadRealm(newItem);
+
+            var realm = RealmService.GetMainThreadRealm(itemType);
             await realm.WriteAsync(() =>
             {
                 if (InitialItem != null) // editing an item

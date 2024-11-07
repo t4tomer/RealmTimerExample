@@ -73,8 +73,11 @@ namespace RealmTodo.ViewModels
         {
             Console.WriteLine($"-->SaveDog method (EditDogViewModel)");
 
-            Dog newDog = new Dog();
-            var realm = RealmService.GetMainThreadRealm(newDog);
+            //Dog newDog = new Dog();
+            ObjectSingleton newObject =  ObjectSingleton.Instance;
+            Dog dogType = new Dog();
+            newObject.SetObjectType(dogType);
+            var realm = RealmService.GetMainThreadRealm(dogType);
             await realm.WriteAsync(() =>
             {
                 if (InitialDog != null) // editing an item
