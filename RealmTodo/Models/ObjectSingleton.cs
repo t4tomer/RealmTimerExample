@@ -12,7 +12,7 @@ namespace RealmTodo.Models
         private static ObjectSingleton _instance;
 
         // Store the type-specific instance, which can be either a Dog or an Item
-        private object _currentObject;
+        private object _currentObject = new Item();
         // Lock object to ensure thread safety.
         private static readonly object _lock = new object();
 

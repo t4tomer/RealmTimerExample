@@ -57,6 +57,12 @@ namespace RealmTodo.ViewModels
         public async Task AddItem()
         {
             Console.WriteLine($"-->AddItem (ItemsViewModel)");
+            ObjectSingleton newObject = ObjectSingleton.Instance;
+            Item itemType = new Item();
+            newObject.SetObjectType(itemType);
+            var realm = RealmService.GetMainThreadRealm(itemType);
+
+
 
             await Shell.Current.GoToAsync($"itemEdit");
         }
@@ -64,6 +70,11 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddDog()
         {
+            ObjectSingleton newObject = ObjectSingleton.Instance;
+            Dog dogType = new Dog();
+            newObject.SetObjectType(dogType);
+            var realm = RealmService.GetMainThreadRealm(dogType);
+
             Console.WriteLine($"-->AddDog (ItemsViewModel)");
 
             await Shell.Current.GoToAsync($"dogEdit");

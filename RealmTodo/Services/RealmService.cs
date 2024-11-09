@@ -19,10 +19,11 @@ namespace RealmTodo.Services
         public static string DataExplorerLink;
 
         //type of object that is uploaded to the mongodb cloud
-        public static Object inputObject = new Item();//orignal code line
+        //public static Object inputObject = new Item();//orignal code line
 
-        //public static ObjectSingleton newObject2 = ObjectSingleton.Instance;
-        //public static Object inputObject = newObject2.GetCurrentObjectType();
+
+        public static ObjectSingleton newObject2 = ObjectSingleton.Instance;
+        public static Object inputObject = newObject2.GetCurrentObjectType();
 
 
 
@@ -62,18 +63,19 @@ namespace RealmTodo.Services
         {
 
 
-
-            if (inputObject is Dog)
-                Console.WriteLine($"inputObject is Dog ");
+            //inputObject = newObject2.GetCurrentObjectType();
+            if (newObject is Dog)
+                Console.WriteLine($"(RealmService)inputObject is Dog ");
+            else if (newObject is Item)
+                Console.WriteLine($"(RealmService)inputObject is Item ");
             else
-                Console.WriteLine($"inputObject is Item ");
-
+                Console.WriteLine($"no defined object type");
 
 
           
 
             
-            return mainThreadRealm ??= GetRealm(inputObject);
+            return mainThreadRealm ??= GetRealm(newObject);
 
         }
 
@@ -89,11 +91,14 @@ namespace RealmTodo.Services
 
             if (ObjectType is Dog)
             {
+
                 Console.WriteLine($"Adding Dog object to realm");
                 config = new FlexibleSyncConfiguration(app.CurrentUser)
                 {
                     PopulateInitialSubscriptions = (realm) =>
                     {
+                        realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+
                         var (query, queryName) = GetQueryForSubscriptionDogType(realm, SubscriptionType.Mine);
                         realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
                     }
@@ -127,6 +132,12 @@ namespace RealmTodo.Services
             //This will populate the initial set of subscriptions the first time the realm is opened
             //Item newItem = new Item();
             //Dog newDog = new Dog();
+            if (inputObject is Dog)
+                Console.WriteLine($"(LoginAsync)inputObject is Dog ");
+            else if (inputObject is Item)
+                Console.WriteLine($"(LoginAsync)inputObject is Item ");
+            else
+                Console.WriteLine($"no defined object type");
 
 
             using var realm = GetRealm(inputObject);
