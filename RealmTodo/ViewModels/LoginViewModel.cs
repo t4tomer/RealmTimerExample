@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using RealmTodo.Services;
-
+using RealmTodo.Models;
 namespace RealmTodo.ViewModels
 {
     public partial class LoginViewModel : BaseViewModel
@@ -8,6 +8,15 @@ namespace RealmTodo.ViewModels
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+
+        public LoginViewModel()
+        {
+            Console.WriteLine($"-->LoginViewModel empty constructor");
+
+        }
+
+
 
         [RelayCommand]
         public async Task OnAppearing()
@@ -32,6 +41,29 @@ namespace RealmTodo.ViewModels
         }
 
         [RelayCommand]
+        public async Task SetDog()
+        {
+            ObjectSingleton newObject1 = ObjectSingleton.Instance;
+            Dog dogType = new Dog();
+            newObject1.SetObjectType(dogType);
+        }
+
+        [RelayCommand]
+        public async Task SetItem()
+        {
+            ObjectSingleton newObject1 = ObjectSingleton.Instance;
+            Item itemType = new Item();
+            newObject1.SetObjectType(itemType);
+
+        }
+
+
+
+
+
+
+
+        [RelayCommand]
         public async Task SignUp()
         {
             if (!await VeryifyEmailAndPassword())
@@ -42,8 +74,10 @@ namespace RealmTodo.ViewModels
             await DoSignup();
         }
 
-        private async Task DoLogin()
+        public async Task DoLogin()
         {
+            Email = "tomer1";//used for testing
+            Password = "tomer112233";//used for testing
             try
             {
                 IsBusy = true;

@@ -2,6 +2,8 @@ using System.Text.Json;
 using Realms;
 using Realms.Sync;
 using RealmTodo.Models;
+using RealmTodo.ViewModels;
+
 using static Realms.Schema.ObjectSchema;
 
 namespace RealmTodo.Services
@@ -30,10 +32,12 @@ namespace RealmTodo.Services
 
         public static async Task Init()
         {
-            if (serviceInitialised)
-            {
-                return;
-            }
+            Console.WriteLine($"---> Init RealmService");
+
+            //if (serviceInitialised)
+            //{
+            //    return;
+            //}
 
             using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("atlasConfig.json");
             using StreamReader reader = new(fileStream);
@@ -62,27 +66,47 @@ namespace RealmTodo.Services
         public static Realm GetMainThreadRealm(Object newObject)
         {
 
-
+            inputObject = newObject2.GetCurrentObjectType();
             //inputObject = newObject2.GetCurrentObjectType();
-            if (newObject is Dog)
-                Console.WriteLine($"(RealmService)inputObject is Dog ");
-            else if (newObject is Item)
-                Console.WriteLine($"(RealmService)inputObject is Item ");
+            if (inputObject is Dog)
+                Console.WriteLine($"(RealmService-GetMainThreadRealm)inputObject is Dog ");
+            else if (inputObject is Item)
+                Console.WriteLine($"(RealmService-GetMainThreadRealm)inputObject is Item ");
             else
                 Console.WriteLine($"no defined object type");
 
+            //test.DoLogin();
 
-          
+   
 
-            
-            return mainThreadRealm ??= GetRealm(newObject);
+
+            return mainThreadRealm ??= GetRealm(inputObject);
 
         }
 
         public static Realm GetRealm(object ObjectType)
         {
+            // Ensure the user is logged in before proceeding
+            if (app.CurrentUser == null)
+            {
+                Console.WriteLine("Error: No user is logged in. Please log in first.");
+                return null;
+            }
 
-            var config = new FlexibleSyncConfiguration(app.CurrentUser);
+            FlexibleSyncConfiguration config;
+
+            // Attempt to create the FlexibleSyncConfiguration
+            try
+            {
+                config = new FlexibleSyncConfiguration(app.CurrentUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while creating FlexibleSyncConfiguration: {ex.Message}");
+                return null;
+            }
+
+             config = new FlexibleSyncConfiguration(app.CurrentUser);
 
             if (ObjectType is Dog)
                 Console.WriteLine($"(GetRealm method)ObjectType is Dog ");
@@ -97,7 +121,7 @@ namespace RealmTodo.Services
                 {
                     PopulateInitialSubscriptions = (realm) =>
                     {
-                        realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+                        //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
 
                         var (query, queryName) = GetQueryForSubscriptionDogType(realm, SubscriptionType.Mine);
                         realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
@@ -111,6 +135,8 @@ namespace RealmTodo.Services
                 {
                     PopulateInitialSubscriptions = (realm) =>
                     {
+                        //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+
                         var (query, queryName) = GetQueryForSubscriptionItemType(realm, SubscriptionType.Mine);
                         realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
                     }
@@ -132,6 +158,8 @@ namespace RealmTodo.Services
             //This will populate the initial set of subscriptions the first time the realm is opened
             //Item newItem = new Item();
             //Dog newDog = new Dog();
+            inputObject = newObject2.GetCurrentObjectType();
+
             if (inputObject is Dog)
                 Console.WriteLine($"(LoginAsync)inputObject is Dog ");
             else if (inputObject is Item)
@@ -189,6 +217,10 @@ namespace RealmTodo.Services
         // new method-used for adding Item class 
         private static (IQueryable<Item> Query, string Name) GetQueryForSubscriptionItemType(Realm realm, SubscriptionType subType)
         {
+            Console.WriteLine($"(GetQueryForSubscriptionItemType)inputObject is Item ");
+
+
+
             IQueryable<Item> query = null;
             string queryName = null;
 
@@ -222,6 +254,10 @@ namespace RealmTodo.Services
         // new method-used for adding Dog class 
         private static (IQueryable<Dog> Query, string Name) GetQueryForSubscriptionDogType(Realm realm, SubscriptionType subType)
         {
+
+            Console.WriteLine($"(GetQueryForSubscriptionDogType)inputObject is Dog ");
+
+
             IQueryable<Dog> query = null;
             string queryName = null;
 

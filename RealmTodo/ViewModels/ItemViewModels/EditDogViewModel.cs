@@ -77,6 +77,7 @@ namespace RealmTodo.ViewModels
             ObjectSingleton newObject =  ObjectSingleton.Instance;
             Dog dogType = new Dog();
             newObject.SetObjectType(dogType);
+
             var realm = RealmService.GetMainThreadRealm(dogType);
             await realm.WriteAsync(() =>
             {

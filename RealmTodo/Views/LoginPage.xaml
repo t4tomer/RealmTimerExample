@@ -36,10 +36,21 @@
                 <TapGestureRecognizer Command="{Binding LoginCommand}" />
             </Label.GestureRecognizers>
         </Label>
-        <Label
-            Text="Please log in or register with a Device Sync user account. This is separate from your Atlas Cloud login"
-            FontSize="Caption"
-            HorizontalTextAlignment="Center"
-            Margin="0, 20"/>
+
+        <!-- Row with setDog and setItem buttons -->
+        <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+            <Button Text="setDog" 
+                    BackgroundColor="Red" 
+                    TextColor="White"
+                    Command="{Binding SetDogCommand}"
+                    WidthRequest="100"/>
+
+            <Button Text="setItem" 
+                    BackgroundColor="Blue" 
+                    TextColor="White"
+                    Command="{Binding SetItemCommand}"
+                    WidthRequest="100"/>
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>
