@@ -91,7 +91,36 @@ namespace RealmTodo.ViewModels
             newObject.SetObjectType(itemType);
             Item newItem = new Item();
 
+
             var realm = RealmService.GetMainThreadRealm(itemType);
+
+            // Check if the subscription for Dog type exists
+            var itemSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "ItemSubscription");
+
+            if (!itemSubscriptionExists)
+            {
+                Console.WriteLine("No existing subscription for Dog. Adding one now...");
+
+                // Add the subscription synchronously
+                realm.Subscriptions.Update(() =>
+                {
+                    var itemQuery = realm.All<Item>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+                    realm.Subscriptions.Add(itemQuery, new SubscriptionOptions { Name = "ItemSubscription" });
+                });
+
+                Console.WriteLine("Item subscription added. Waiting for synchronization...");
+
+                // Wait for synchronization
+                await realm.Subscriptions.WaitForSynchronizationAsync();
+                Console.WriteLine("Subscriptions synchronized successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Item subscription already exists.");
+            }
+
+
+
             await realm.WriteAsync(() =>
             {
                 if (InitialItem != null) // editing an item

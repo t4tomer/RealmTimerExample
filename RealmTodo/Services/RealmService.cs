@@ -16,6 +16,11 @@ namespace RealmTodo.Services
 
         private static Realm mainThreadRealm;
 
+        private static Realm mainThreadRealmDog;
+
+       private static FlexibleSyncConfiguration config3;
+
+
         public static User CurrentUser => app.CurrentUser;
 
         public static string DataExplorerLink;
@@ -63,85 +68,137 @@ namespace RealmTodo.Services
             Console.WriteLine($"To view your data in Atlas, use this link: {DataExplorerLink}");
         }
 
+
         public static Realm GetMainThreadRealm(Object newObject)
         {
 
             inputObject = newObject2.GetCurrentObjectType();
-            //inputObject = newObject2.GetCurrentObjectType();
-            if (inputObject is Dog)
-                Console.WriteLine($"(RealmService-GetMainThreadRealm)inputObject is Dog ");
-            else if (inputObject is Item)
-                Console.WriteLine($"(RealmService-GetMainThreadRealm)inputObject is Item ");
-            else
-                Console.WriteLine($"no defined object type");
-
-            //test.DoLogin();
-
-   
 
 
             return mainThreadRealm ??= GetRealm(inputObject);
 
         }
 
+        public static Realm GetMainThreadRealmDog(Object newObject)
+        {
+            Console.WriteLine($"GetMainThreadRealmDog--->Dog type");
+
+            // Delete the existing Realm file
+            //var configPath = Realm.GetInstance(GetRealmForMultipleTypes().Config).Config.DatabasePath;
+            var configPath = Realm.GetInstance(GetRealm(new Item()).Config).Config.DatabasePath;
+
+            if (File.Exists(configPath))
+            {
+                File.Delete(configPath);
+            }
+
+            //return mainThreadRealmDog ??= GetRealmDog();
+            return mainThreadRealm ??= GetRealmForMultipleTypes();
+
+        }
+
+
+        public static Realm GetRealmForMultipleTypes()
+        {
+
+            Console.WriteLine("Adding subscriptions for both Dog and Item.");
+
+            config3 = new FlexibleSyncConfiguration(app.CurrentUser)
+            {
+                PopulateInitialSubscriptions = (realm3) =>
+                {
+                    Console.WriteLine("FlexibleSyncConfiguration-GetRealmForMultipleTypes1");
+
+                    // Add Dog subscription
+                    var (dogQuery, dogQueryName) = GetQueryForSubscriptionDogType(realm3, SubscriptionType.Mine);
+                    realm3.Subscriptions.Add(dogQuery, new SubscriptionOptions { Name = dogQueryName });
+
+                    // Add newDOG123
+                    realm3.Add(new Dog() { OwnerId = CurrentUser.Id, Name = "NewDog123", Age = 0 });
+
+                    // Add Item subscription
+                    var (itemQuery, itemQueryName) = GetQueryForSubscriptionItemType(realm3, SubscriptionType.Mine);
+                    realm3.Subscriptions.Add(itemQuery, new SubscriptionOptions { Name = itemQueryName });
+                    //Add newITEM123
+                    realm3.Add(new Item() { OwnerId = CurrentUser.Id, Summary = "NewItem123" });
+
+                    //realm3.Subscriptions.WaitForSynchronizationAsync().Wait();
+                    Console.WriteLine("Subscriptions synchronized successfully.");                    
+
+                }
+            };
+
+            Console.WriteLine("Returning Realm with subscriptions for both Dog and Item.");
+            return Realm.GetInstance(config3);
+        }
+
+
+
+
+
+
+
+
+        public static Realm GetRealmDog()
+        {
+
+            FlexibleSyncConfiguration config2;
+
+
+
+            //config2 = new FlexibleSyncConfiguration(app.CurrentUser);
+
+    
+      
+
+            Console.WriteLine($"Adding Dog object to realm");
+            config2 = new FlexibleSyncConfiguration(app.CurrentUser)
+            {
+                PopulateInitialSubscriptions = (realm2) =>
+                {
+                    //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+                    Console.WriteLine($"FlexibleSyncConfiguration--Dog1");
+                    var (query2, queryName2) = GetQueryForSubscriptionDogType(realm2, SubscriptionType.Mine);
+                    realm2.Subscriptions.Add(query2, new SubscriptionOptions { Name = queryName2 });
+                    Console.WriteLine($"FlexibleSyncConfiguration--Dog2");
+
+
+                }
+
+            };
+
+
+            Console.WriteLine($"FlexibleSyncConfiguration--Dog3");
+
+
+            return Realm.GetInstance(config2);
+        }
+
+
         public static Realm GetRealm(object ObjectType)
         {
-            // Ensure the user is logged in before proceeding
-            if (app.CurrentUser == null)
-            {
-                Console.WriteLine("Error: No user is logged in. Please log in first.");
-                return null;
-            }
-
+  
             FlexibleSyncConfiguration config;
 
-            // Attempt to create the FlexibleSyncConfiguration
-            try
-            {
-                config = new FlexibleSyncConfiguration(app.CurrentUser);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while creating FlexibleSyncConfiguration: {ex.Message}");
-                return null;
-            }
+ 
 
              config = new FlexibleSyncConfiguration(app.CurrentUser);
 
-            if (ObjectType is Dog)
-                Console.WriteLine($"(GetRealm method)ObjectType is Dog ");
-            else
-                Console.WriteLine($"(GetRealm method)ObjectType is Item ");
-
-            if (ObjectType is Dog)
+            Console.WriteLine($"Adding Item object to realm");
+            config = new FlexibleSyncConfiguration(app.CurrentUser)
             {
-
-                Console.WriteLine($"Adding Dog object to realm");
-                config = new FlexibleSyncConfiguration(app.CurrentUser)
+                PopulateInitialSubscriptions = (realm) =>
                 {
-                    PopulateInitialSubscriptions = (realm) =>
-                    {
-                        //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+                    Console.WriteLine($"FlexibleSyncConfiguration--Item1");
 
-                        var (query, queryName) = GetQueryForSubscriptionDogType(realm, SubscriptionType.Mine);
-                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
-                    }
-                };
-            }
-            else if (ObjectType is Item)
-            {
-                Console.WriteLine($"Adding Item object to realm");
-                config = new FlexibleSyncConfiguration(app.CurrentUser)
-                {
-                    PopulateInitialSubscriptions = (realm) =>
-                    {
-                        //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
+                    var (query, queryName) = GetQueryForSubscriptionItemType(realm, SubscriptionType.Mine);
+                    realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+                    Console.WriteLine($"FlexibleSyncConfiguration--Item2");
 
-                        var (query, queryName) = GetQueryForSubscriptionItemType(realm, SubscriptionType.Mine);
-                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
-                    }
-                };
-            }
+                }
+            };
+
+            Console.WriteLine($"FlexibleSyncConfiguration--Item3");
 
             return Realm.GetInstance(config);
         }

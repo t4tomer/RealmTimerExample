@@ -71,44 +71,55 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task SaveDog()
         {
-            Console.WriteLine($"-->SaveDog method (EditDogViewModel)");
+            Console.WriteLine($"--> SaveDog method (EditDogViewModel)");
 
-            //Dog newDog = new Dog();
-            ObjectSingleton newObject =  ObjectSingleton.Instance;
-            Dog dogType = new Dog();
-            newObject.SetObjectType(dogType);
+            // Get the Realm instance
+            var realm = RealmService.GetMainThreadRealmDog(new Dog());
 
-            var realm = RealmService.GetMainThreadRealm(dogType);
+            // Check if the subscription for Dog type exists
+            var dogSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "DogSubscription");
+
+            if (!dogSubscriptionExists)
+            {
+                Console.WriteLine("No existing subscription for Dog. Adding one now...");
+
+                // Add the subscription synchronously
+                realm.Subscriptions.Update(() =>
+                {
+                    var dogQuery = realm.All<Dog>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+                    realm.Subscriptions.Add(dogQuery, new SubscriptionOptions { Name = "DogSubscription" });
+                });
+
+                Console.WriteLine("Dog subscription added. Waiting for synchronization...");
+
+                // Wait for synchronization
+                await realm.Subscriptions.WaitForSynchronizationAsync();
+                Console.WriteLine("Subscriptions synchronized successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Dog subscription already exists.");
+            }
+
+            // Proceed with adding the Dog object
             await realm.WriteAsync(() =>
             {
-                if (InitialDog != null) // editing an item
+                realm.Add(new Dog()
                 {
-                    //InitialItem.Summary = Summary;
-                    InitialDog.Name = Name;
-                    InitialDog.Age = Age;
-                }
-                else // creating a new item
-                {
-                    realm.Add(new Dog()
-                    {
-                        OwnerId = RealmService.CurrentUser.Id,
-                        Name = summary,
-                        Age = 0
-                    });
-                }
+                    OwnerId = RealmService.CurrentUser.Id,
+                    Name = summary,
+                    Age = 5
+                });
             });
 
-            // If you're getting this app code by cloning the repository at
-            // https://github.com/mongodb/template-app-maui-todo, 
-            // it does not contain the data explorer link. Download the
-            // app template from the Atlas UI to view a link to your data.
             Console.WriteLine($"To view your data in Atlas, use this link: {RealmService.DataExplorerLink}");
             await Shell.Current.GoToAsync("..");
         }
 
 
 
-      
+
+
 
         [RelayCommand]
         public async Task Cancel()
