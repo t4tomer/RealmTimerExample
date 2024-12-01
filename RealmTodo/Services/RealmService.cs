@@ -39,10 +39,6 @@ namespace RealmTodo.Services
         {
             Console.WriteLine($"---> Init RealmService");
 
-            //if (serviceInitialised)
-            //{
-            //    return;
-            //}
 
             using Stream fileStream = await FileSystem.Current.OpenAppPackageFileAsync("atlasConfig.json");
             using StreamReader reader = new(fileStream);
@@ -72,27 +68,15 @@ namespace RealmTodo.Services
         public static Realm GetMainThreadRealm(Object newObject)
         {
 
-            inputObject = newObject2.GetCurrentObjectType();
 
 
-            return mainThreadRealm ??= GetRealm(inputObject);
+            return mainThreadRealm ??= GetRealmForMultipleTypes();
 
         }
 
         public static Realm GetMainThreadRealmDog(Object newObject)
         {
-            Console.WriteLine($"GetMainThreadRealmDog--->Dog type");
 
-            // Delete the existing Realm file
-            //var configPath = Realm.GetInstance(GetRealmForMultipleTypes().Config).Config.DatabasePath;
-            var configPath = Realm.GetInstance(GetRealm(new Item()).Config).Config.DatabasePath;
-
-            if (File.Exists(configPath))
-            {
-                File.Delete(configPath);
-            }
-
-            //return mainThreadRealmDog ??= GetRealmDog();
             return mainThreadRealm ??= GetRealmForMultipleTypes();
 
         }
@@ -113,14 +97,9 @@ namespace RealmTodo.Services
                     var (dogQuery, dogQueryName) = GetQueryForSubscriptionDogType(realm3, SubscriptionType.Mine);
                     realm3.Subscriptions.Add(dogQuery, new SubscriptionOptions { Name = dogQueryName });
 
-                    // Add newDOG123
-                    realm3.Add(new Dog() { OwnerId = CurrentUser.Id, Name = "NewDog123", Age = 0 });
-
                     // Add Item subscription
                     var (itemQuery, itemQueryName) = GetQueryForSubscriptionItemType(realm3, SubscriptionType.Mine);
                     realm3.Subscriptions.Add(itemQuery, new SubscriptionOptions { Name = itemQueryName });
-                    //Add newITEM123
-                    realm3.Add(new Item() { OwnerId = CurrentUser.Id, Summary = "NewItem123" });
 
                     //realm3.Subscriptions.WaitForSynchronizationAsync().Wait();
                     Console.WriteLine("Subscriptions synchronized successfully.");                    
@@ -133,46 +112,6 @@ namespace RealmTodo.Services
         }
 
 
-
-
-
-
-
-
-        public static Realm GetRealmDog()
-        {
-
-            FlexibleSyncConfiguration config2;
-
-
-
-            //config2 = new FlexibleSyncConfiguration(app.CurrentUser);
-
-    
-      
-
-            Console.WriteLine($"Adding Dog object to realm");
-            config2 = new FlexibleSyncConfiguration(app.CurrentUser)
-            {
-                PopulateInitialSubscriptions = (realm2) =>
-                {
-                    //realm.Subscriptions.RemoveAll(true); // Clear previous subscriptions
-                    Console.WriteLine($"FlexibleSyncConfiguration--Dog1");
-                    var (query2, queryName2) = GetQueryForSubscriptionDogType(realm2, SubscriptionType.Mine);
-                    realm2.Subscriptions.Add(query2, new SubscriptionOptions { Name = queryName2 });
-                    Console.WriteLine($"FlexibleSyncConfiguration--Dog2");
-
-
-                }
-
-            };
-
-
-            Console.WriteLine($"FlexibleSyncConfiguration--Dog3");
-
-
-            return Realm.GetInstance(config2);
-        }
 
 
         public static Realm GetRealm(object ObjectType)

@@ -64,10 +64,6 @@ namespace RealmTodo.ViewModels
 
 
 
-
-
-
-
         [RelayCommand]
         public async Task SaveDog()
         {
