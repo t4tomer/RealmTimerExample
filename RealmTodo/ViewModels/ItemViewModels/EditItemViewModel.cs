@@ -92,14 +92,15 @@ namespace RealmTodo.ViewModels
             Item newItem = new Item();
 
 
-            var realm = RealmService.GetMainThreadRealm(itemType);
+            var realm = RealmService.GetMainThreadRealm();
+            //this check fixed the problem of no flexibale subscrption !!!!
 
-            // Check if the subscription for Dog type exists
+            // Check if the subscription for Item type exists
             var itemSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "ItemSubscription");
 
             if (!itemSubscriptionExists)
             {
-                Console.WriteLine("No existing subscription for Dog. Adding one now...");
+                Console.WriteLine("No existing subscription for Item. Adding one now...");
 
                 // Add the subscription synchronously
                 realm.Subscriptions.Update(() =>

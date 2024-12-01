@@ -20,6 +20,12 @@ namespace RealmTodo.ViewModels
         [ObservableProperty]
         private IQueryable<Item> items;
 
+
+        [ObservableProperty]
+        private IQueryable<Dog> dogs;
+
+
+
         [ObservableProperty]
         public string dataExplorerLink = RealmService.DataExplorerLink;
 
@@ -32,12 +38,12 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
-            ObjectSingleton newObject = ObjectSingleton.Instance;
-            Item newItem = newObject.getItemObject();
             
-            realm = RealmService.GetMainThreadRealm(newItem);
+            realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            Items = realm.All<Item>().OrderBy(i => i.Id);
+            //Items = realm.All<Item>().OrderBy(i => i.Id); orginal code 
+            Dogs = realm.All<Dog>().OrderBy(i => i.Id);
+
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
@@ -58,9 +64,7 @@ namespace RealmTodo.ViewModels
         {
             Console.WriteLine($"-->AddItem (ItemsViewModel)");
             ObjectSingleton newObject = ObjectSingleton.Instance;
-            Item itemType = new Item();
-            newObject.SetObjectType(itemType);
-            var realm = RealmService.GetMainThreadRealm(itemType);
+            var realm = RealmService.GetMainThreadRealm();
 
 
 
@@ -71,9 +75,8 @@ namespace RealmTodo.ViewModels
         public async Task AddDog()
         {
             ObjectSingleton newObject = ObjectSingleton.Instance;
-            Dog dogType = new Dog();
-            newObject.SetObjectType(dogType);
-            var realm = RealmService.GetMainThreadRealm(dogType);
+
+            var realm = RealmService.GetMainThreadRealm();
 
             Console.WriteLine($"-->AddDog (ItemsViewModel)");
 

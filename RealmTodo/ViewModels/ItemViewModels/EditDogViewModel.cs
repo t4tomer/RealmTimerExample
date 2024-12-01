@@ -70,7 +70,9 @@ namespace RealmTodo.ViewModels
             Console.WriteLine($"--> SaveDog method (EditDogViewModel)");
 
             // Get the Realm instance
-            var realm = RealmService.GetMainThreadRealmDog(new Dog());
+            var realm = RealmService.GetMainThreadRealm();
+
+            //this check fixed the problem of no flexibale subscrption !!!!
 
             // Check if the subscription for Dog type exists
             var dogSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "DogSubscription");

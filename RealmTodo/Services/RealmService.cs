@@ -65,7 +65,7 @@ namespace RealmTodo.Services
         }
 
 
-        public static Realm GetMainThreadRealm(Object newObject)
+        public static Realm GetMainThreadRealm( )
         {
 
 
@@ -74,12 +74,7 @@ namespace RealmTodo.Services
 
         }
 
-        public static Realm GetMainThreadRealmDog(Object newObject)
-        {
 
-            return mainThreadRealm ??= GetRealmForMultipleTypes();
-
-        }
 
 
         public static Realm GetRealmForMultipleTypes()
