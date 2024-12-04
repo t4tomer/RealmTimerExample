@@ -22,7 +22,6 @@ namespace RealmTodo.ViewModels
         [ObservableProperty]
         private string pageHeader;
         // item class 
-        private static Realms.Sync.App app;
 
         private string currentUserId = RealmService.CurrentUser.Id;
 
@@ -43,24 +42,7 @@ namespace RealmTodo.ViewModels
 
 
 
-        //// ApplyQueryAttributes-dog class 
-        //public void ApplyQueryAttributes(IDictionary<string, object> query)
-        //{
-        //    if (query.Count > 0 && query["dog"] != null) // we're editing an Item
-        //    {
-        //        InitialDog = query["dog"] as Dog;
-        //        Name = InitialDog.Name;
-        //        Age = InitialDog.Age;
-        //        PageHeader = $"Modify Dog {InitialDog.Id}";
-        //    }
-        //    else // we're creating a new item
-        //    {
-        //        Name = "nameTest";
-        //        Age = 0;
-        //    }
-        //}
 
-         //ApplyQueryAttributes -item class
         public void ApplyQueryAttributes(IDictionary<string, object> query)
         {
             Console.WriteLine($"-->ApplyQueryAttributes method (EditItemViewModel)");
@@ -80,15 +62,48 @@ namespace RealmTodo.ViewModels
 
 
 
+        [RelayCommand]
+        public async Task PrintItemSummary()
+        {
+            Console.WriteLine("-----> PrintItemSummary method");
+            Console.WriteLine($"\n the current user id : {currentUserId}");
+
+
+            try
+            {
+                // Get the Realm instance
+                var realm = RealmService.GetMainThreadRealm();
+
+                // Fetch all items belonging to the current user
+                var items = realm.All<Item>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+
+                if (items.Any())
+                {
+                    Console.WriteLine("Items found in Realm DB:");
+                    foreach (var item in items)
+                    {
+                        Console.WriteLine($"\n - {item.Summary}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No items found in the Realm database for the current user.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while fetching items: {ex.Message}");
+            }
+        }
+
+
 
         [RelayCommand]
         public async Task SaveItem()
         {
             Console.WriteLine($"-->SaveItem method (EditITemViewModel)");
 
-            ObjectSingleton newObject = ObjectSingleton.Instance;
             object itemType = new Item();
-            newObject.SetObjectType(itemType);
             Item newItem = new Item();
 
 

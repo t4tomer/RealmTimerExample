@@ -11,6 +11,8 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute("dogEdit", typeof(EditDogPage));
 
+        Routing.RegisterRoute("mapPinEdit", typeof(EditMapPinPage));
+
 
         Routing.RegisterRoute("userRecordEdit", typeof(EditUserRecordPage));
 

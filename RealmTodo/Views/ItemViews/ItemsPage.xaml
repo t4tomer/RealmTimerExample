@@ -25,6 +25,11 @@
             <RowDefinition Height="70" />
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
+            <!-- row for the button addMapPin -->
+
+            <RowDefinition Height="60" />
+
+
         </Grid.RowDefinitions>
         <StackLayout Orientation="Horizontal"
                      BackgroundColor="#E3FCF7"
@@ -106,9 +111,21 @@
                         BackgroundColor="Yellow"
                     />
         </Frame>
-        
-        <!-- Add dog to mongo db -->
+        <!-- Add MapPin to mongo db -->
+
         <Frame Grid.Row="4" Padding="10" BorderColor="Black" BackgroundColor="#E3FCF7" Margin="5">
+            <Button
+                Text="Add new MapPin"
+                FontSize="15"          
+                HeightRequest="40"
+                Padding="2"
+                Command="{Binding AddMapPinCommand}"
+                BackgroundColor="Red"/>
+
+        </Frame>
+
+        <!-- Add dog to mongo db -->
+        <Frame Grid.Row="5" Padding="10" BorderColor="Black" BackgroundColor="#E3FCF7" Margin="5">
             <Button
                 Text="Add new Dog"
                 FontSize="15"          
@@ -118,5 +135,7 @@
                 BackgroundColor="Black"/>
 
         </Frame>
+
+
     </Grid>
 </ContentPage>

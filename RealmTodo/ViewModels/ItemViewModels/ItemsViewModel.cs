@@ -63,7 +63,6 @@ namespace RealmTodo.ViewModels
         public async Task AddItem()
         {
             Console.WriteLine($"-->AddItem (ItemsViewModel)");
-            ObjectSingleton newObject = ObjectSingleton.Instance;
             var realm = RealmService.GetMainThreadRealm();
 
 
@@ -74,7 +73,6 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddDog()
         {
-            ObjectSingleton newObject = ObjectSingleton.Instance;
 
             var realm = RealmService.GetMainThreadRealm();
 
@@ -84,6 +82,20 @@ namespace RealmTodo.ViewModels
             //var editDogPage = new EditDogPage();
             //await Shell.Current.Navigation.PushAsync(editDogPage);
         }
+
+        [RelayCommand]
+        public async Task AddMapPin()
+        {
+
+            var realm = RealmService.GetMainThreadRealm();
+
+            Console.WriteLine($"-->AddMapPin (ItemsViewModel)");
+
+            await Shell.Current.GoToAsync($"mapPinEdit");
+            //var editDogPage = new EditDogPage();
+            //await Shell.Current.Navigation.PushAsync(editDogPage);
+        }
+
 
 
 

@@ -40,22 +40,7 @@ namespace RealmTodo.ViewModels
             await DoLogin();
         }
 
-        [RelayCommand]
-        public async Task SetDog()
-        {
-            ObjectSingleton newObject1 = ObjectSingleton.Instance;
-            Dog dogType = new Dog();
-            newObject1.SetObjectType(dogType);
-        }
-
-        [RelayCommand]
-        public async Task SetItem()
-        {
-            ObjectSingleton newObject1 = ObjectSingleton.Instance;
-            Item itemType = new Item();
-            newObject1.SetObjectType(itemType);
-
-        }
+  
 
 
 
