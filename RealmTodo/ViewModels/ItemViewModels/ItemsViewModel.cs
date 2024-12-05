@@ -41,7 +41,7 @@ namespace RealmTodo.ViewModels
             
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            //Items = realm.All<Item>().OrderBy(i => i.Id); orginal code 
+            Items = realm.All<Item>().OrderBy(i => i.Id); //orginal code 
             Dogs = realm.All<Dog>().OrderBy(i => i.Id);
 
 
