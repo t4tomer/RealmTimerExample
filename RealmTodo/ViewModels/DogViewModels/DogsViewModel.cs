@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace RealmTodo.ViewModels
 {
-    public partial class ItemsViewModel : BaseViewModel
+    public partial class DogsViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string connectionStatusIcon = "wifi_on.png";
@@ -20,19 +20,30 @@ namespace RealmTodo.ViewModels
         [ObservableProperty]
         private IQueryable<Item> items;
 
+
+        [ObservableProperty]
+        private IQueryable<Dog> dogs;
+
+
+
         [ObservableProperty]
         public string dataExplorerLink = RealmService.DataExplorerLink;
 
         private Realm realm;
         private string currentUserId;
         private bool isOnline = true;
+        public ICommand NavigateCommand { get; private set; }
+
 
         [RelayCommand]
         public void OnAppearing()
         {
+            
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            Items = realm.All<Item>().OrderBy(i => i.Id);
+            Items = realm.All<Item>().OrderBy(i => i.Id); //orginal code 
+            Dogs = realm.All<Dog>().OrderBy(i => i.Id);
+
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
@@ -51,9 +62,13 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddItem()
         {
+            Console.WriteLine($"-->AddItem (ItemsViewModel)");
+            var realm = RealmService.GetMainThreadRealm();
+
+
+
             await Shell.Current.GoToAsync($"itemEdit");
         }
-
 
         [RelayCommand]
         public async Task AddDog()
@@ -88,7 +103,7 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task ToTimerPage()//transfer to timer page
         {
-            // Navigate to the singleton instance of TimerPAge
+            // Navigate to the singleton instance of MapPage
             var timerPage = TimerPage.Instance;
             await Shell.Current.Navigation.PushAsync(timerPage);            
         }

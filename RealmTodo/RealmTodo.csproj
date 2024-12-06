@@ -60,10 +60,10 @@
 		<Folder Include="Services\" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Compile Update="Views\ItemViews\EditMapPinPage.xaml.cs">
+	  <Compile Update="Views\MapPinViews\EditMapPinPage.xaml.cs">
 	    <DependentUpon>EditMapPinPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\ItemViews\EditDogPage.xaml.cs">
+	  <Compile Update="Views\DogViews\EditDogPage.xaml.cs">
 	    <DependentUpon>EditDogPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\TimerPage.xaml.cs">
@@ -77,10 +77,10 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<MauiXaml Update="Views\ItemViews\EditMapPinPage.xaml">
+		<MauiXaml Update="Views\MapPinViews\EditMapPinPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\ItemViews\EditDogPage.xaml">
+		<MauiXaml Update="Views\DogViews\EditDogPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\TimerPage.xaml">

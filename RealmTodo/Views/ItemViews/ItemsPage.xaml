@@ -28,6 +28,8 @@
             <!-- row for the button addMapPin -->
 
             <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+
 
 
         </Grid.RowDefinitions>
@@ -133,6 +135,18 @@
                 Padding="2"
                 Command="{Binding AddDogCommand}"
                 BackgroundColor="Black"/>
+
+        </Frame>
+
+        <!-- Add dog to mongo db -->
+        <Frame Grid.Row="6" Padding="10" BorderColor="Black" BackgroundColor="#E3FCF7" Margin="5">
+            <Button
+                Text="To Timer Page"
+                FontSize="15"          
+                HeightRequest="40"
+                Padding="2"
+                Command="{Binding ToTimerPageCommand}"
+                BackgroundColor="Purple"/>
 
         </Frame>
 
