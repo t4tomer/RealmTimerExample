@@ -46,7 +46,7 @@
                     VerticalOptions="Center" 
                     IsToggled="{Binding IsShowAllTasks}" />
         </StackLayout>
-        <ListView ItemsSource="{Binding Items}"
+        <ListView ItemsSource="{Binding Dogs}"
                   SelectionMode="None"
                   Grid.Row="1"
                   BackgroundColor="White">
@@ -61,10 +61,10 @@
                                          HorizontalOptions="FillAndExpand" 
                                          VerticalOptions="Center">
                                 <StackLayout.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.EditItemCommand, Source={x:Reference itemsPage}}"
+                                    <TapGestureRecognizer Command="{Binding Path=BindingContext.EditDogCommand, Source={x:Reference itemsPage}}"
                                                           CommandParameter="{Binding .}"/>
                                 </StackLayout.GestureRecognizers>
-                                <Label Text="{Binding Summary}"
+                                <Label Text="{Binding Name}"
                                        HorizontalOptions="FillAndExpand"
                                        VerticalOptions="Center"/>
                                 <Label Text="(mine)"
@@ -78,7 +78,7 @@
                                     BackgroundColor="Transparent"
                                     VerticalOptions="Center" 
                                     HorizontalOptions="End"
-                                    Command="{Binding Path=BindingContext.DeleteItemCommand, Source={x:Reference itemsPage}}"
+                                    Command="{Binding Path=BindingContext.DeleteDogCommand, Source={x:Reference itemsPage}}"
                                     CommandParameter="{Binding .}"
                                     IsEnabled="{Binding IsMine}" />
                         </StackLayout>

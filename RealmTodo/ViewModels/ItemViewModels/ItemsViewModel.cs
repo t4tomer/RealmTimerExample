@@ -21,6 +21,9 @@ namespace RealmTodo.ViewModels
         private IQueryable<Item> items;
 
         [ObservableProperty]
+        private IQueryable<Dog> dogs;
+
+        [ObservableProperty]
         public string dataExplorerLink = RealmService.DataExplorerLink;
 
         private Realm realm;
@@ -33,6 +36,7 @@ namespace RealmTodo.ViewModels
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
             Items = realm.All<Item>().OrderBy(i => i.Id);
+            Dogs = realm.All<Dog>().OrderBy(i => i.Id);
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
@@ -93,6 +97,20 @@ namespace RealmTodo.ViewModels
             await Shell.Current.Navigation.PushAsync(timerPage);            
         }
 
+        [RelayCommand]
+        public async Task EditDog(Dog dog)
+        {
+            // Implement navigation or logic for editing a dog
+            if (dog == null)
+            {
+                Console.WriteLine("Dog parameter is null.");
+                return;
+            }
+
+            Console.WriteLine($"Editing dog: {dog.Name}");
+            var dogParameter = new Dictionary<string, object> { { "dog", dog } };
+            await Shell.Current.GoToAsync("dogEdit", dogParameter);
+        }
 
 
 
@@ -121,6 +139,22 @@ namespace RealmTodo.ViewModels
                 realm.Remove(item);
             });
         }
+
+        [RelayCommand]
+        public async Task DeleteDog(Dog dog)
+        {
+            if (!await CheckItemOwnershipDog(dog))
+            {
+                return;
+            }
+
+            await realm.WriteAsync(() =>
+            {
+                realm.Remove(dog);
+            });
+        }
+
+
 
         [RelayCommand]
         public void ChangeConnectionStatus()
@@ -155,6 +189,22 @@ namespace RealmTodo.ViewModels
 
             return true;
         }
+
+        private async Task<bool> CheckItemOwnershipDog(Dog dog)
+        {
+            if (!dog.IsMine)
+            {
+                await DialogService.ShowAlertAsync("Error", "You cannot modify dog not belonging to you", "OK");
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+
+
 
         async partial void OnIsShowAllTasksChanged(bool value)
         {
