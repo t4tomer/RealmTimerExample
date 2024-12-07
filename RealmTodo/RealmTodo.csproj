@@ -60,6 +60,9 @@
 		<Folder Include="Services\" />
 	</ItemGroup>
 	<ItemGroup>
+	  <Compile Update="Views\DogViews\DogsPage.xaml.cs">
+	    <DependentUpon>DogsPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Views\MapPinViews\EditMapPinPage.xaml.cs">
 	    <DependentUpon>EditMapPinPage.xaml</DependentUpon>
 	  </Compile>
@@ -77,6 +80,11 @@
 	  </Compile>
 	</ItemGroup>
 	<ItemGroup>
+		<MauiXaml Update="Views\DogViews\DogsPage.xaml">
+		  <SubType>
+			</SubType>
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\MapPinViews\EditMapPinPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

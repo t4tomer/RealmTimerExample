@@ -12,12 +12,15 @@
         Route="login" />
 
     <ShellContent
-        Title="RealmTodo"
+        Title="ItemList"
         ContentTemplate="{DataTemplate local:ItemsPage}"
         Route="items" />
-    
-    
-    
-    
+
+    <ShellContent
+        Title="DogList"
+        ContentTemplate="{DataTemplate local:DogsPage}"
+        Route="dogs" />
+
+
 </Shell>
 

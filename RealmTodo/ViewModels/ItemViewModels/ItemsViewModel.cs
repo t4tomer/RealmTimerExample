@@ -59,18 +59,7 @@ namespace RealmTodo.ViewModels
         }
 
 
-        [RelayCommand]
-        public async Task AddDog()
-        {
 
-            var realm = RealmService.GetMainThreadRealm();
-
-            Console.WriteLine($"-->AddDog (ItemsViewModel)");
-
-            await Shell.Current.GoToAsync($"dogEdit");
-            //var editDogPage = new EditDogPage();
-            //await Shell.Current.Navigation.PushAsync(editDogPage);
-        }
 
         [RelayCommand]
         public async Task AddMapPin()
@@ -97,20 +86,6 @@ namespace RealmTodo.ViewModels
             await Shell.Current.Navigation.PushAsync(timerPage);            
         }
 
-        [RelayCommand]
-        public async Task EditDog(Dog dog)
-        {
-            // Implement navigation or logic for editing a dog
-            if (dog == null)
-            {
-                Console.WriteLine("Dog parameter is null.");
-                return;
-            }
-
-            Console.WriteLine($"Editing dog: {dog.Name}");
-            var dogParameter = new Dictionary<string, object> { { "dog", dog } };
-            await Shell.Current.GoToAsync("dogEdit", dogParameter);
-        }
 
 
 
@@ -140,19 +115,6 @@ namespace RealmTodo.ViewModels
             });
         }
 
-        [RelayCommand]
-        public async Task DeleteDog(Dog dog)
-        {
-            if (!await CheckItemOwnershipDog(dog))
-            {
-                return;
-            }
-
-            await realm.WriteAsync(() =>
-            {
-                realm.Remove(dog);
-            });
-        }
 
 
 
@@ -190,7 +152,7 @@ namespace RealmTodo.ViewModels
             return true;
         }
 
-        private async Task<bool> CheckItemOwnershipDog(Dog dog)
+        private async Task<bool> CheckDogOwnership(Dog dog)
         {
             if (!dog.IsMine)
             {

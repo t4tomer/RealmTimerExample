@@ -59,16 +59,6 @@ namespace RealmTodo.ViewModels
             await Shell.Current.GoToAsync($"//login");
         }
 
-        [RelayCommand]
-        public async Task AddItem()
-        {
-            Console.WriteLine($"-->AddItem (ItemsViewModel)");
-            var realm = RealmService.GetMainThreadRealm();
-
-
-
-            await Shell.Current.GoToAsync($"itemEdit");
-        }
 
         [RelayCommand]
         public async Task AddDog()
@@ -82,6 +72,37 @@ namespace RealmTodo.ViewModels
             //var editDogPage = new EditDogPage();
             //await Shell.Current.Navigation.PushAsync(editDogPage);
         }
+
+        [RelayCommand]
+        public async Task DeleteDog(Dog dog)
+        {
+            //if (!await CheckDogOwnership(dog))
+            //{
+            //    return;
+            //}
+
+            await realm.WriteAsync(() =>
+            {
+                realm.Remove(dog);
+            });
+        }
+
+
+        [RelayCommand]
+        public async Task EditDog(Dog dog)
+        {
+            // Implement navigation or logic for editing a dog
+            if (dog == null)
+            {
+                Console.WriteLine("Dog parameter is null.");
+                return;
+            }
+
+            Console.WriteLine($"Editing dog: {dog.Name}");
+            var dogParameter = new Dictionary<string, object> { { "dog", dog } };
+            await Shell.Current.GoToAsync("dogEdit", dogParameter);
+        }
+
 
         [RelayCommand]
         public async Task AddMapPin()
