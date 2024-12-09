@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace RealmTodo.ViewModels
 {
-    public partial class ItemsViewModel : BaseViewModel
+    public partial class MapsViewModel : BaseViewModel
     {
         [ObservableProperty]
         private string connectionStatusIcon = "wifi_on.png";
@@ -17,8 +17,11 @@ namespace RealmTodo.ViewModels
         [ObservableProperty]
         private bool isShowAllTasks;
 
+
+
         [ObservableProperty]
-        private IQueryable<Item> items;
+        private IQueryable<MapPin> maps;
+
 
 
 
@@ -34,7 +37,7 @@ namespace RealmTodo.ViewModels
         {
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            Items = realm.All<Item>().OrderBy(i => i.Id);
+            Maps = realm.All<MapPin>().OrderBy(i => i.Id);
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
@@ -53,7 +56,7 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddItem()
         {
-            Console.WriteLine($"-->AddItem (ItemsViewModel)");
+            Console.WriteLine($"-->AddItem (MapsViewModel)");
 
             await Shell.Current.GoToAsync($"itemEdit");
         }
@@ -61,7 +64,7 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddDog()
         {
-            Console.WriteLine($"-->AddDog (ItemsViewModel)");
+            Console.WriteLine($"-->AddDog (MapsViewModel)");
 
             await Shell.Current.GoToAsync($"dogEdit");
         }
@@ -74,7 +77,7 @@ namespace RealmTodo.ViewModels
 
             var realm = RealmService.GetMainThreadRealm();
 
-            Console.WriteLine($"-->AddMapPin (ItemsViewModel)");
+            Console.WriteLine($"-->AddMapPin (MapsViewModel)");
 
             await Shell.Current.GoToAsync($"mapPinEdit");
             //var editDogPage = new EditDogPage();
@@ -90,7 +93,7 @@ namespace RealmTodo.ViewModels
         {
             // Navigate to the singleton instance of TimerPAge
             var timerPage = TimerPage.Instance;
-            await Shell.Current.Navigation.PushAsync(timerPage);            
+            await Shell.Current.Navigation.PushAsync(timerPage);
         }
 
 
@@ -98,27 +101,27 @@ namespace RealmTodo.ViewModels
 
 
         [RelayCommand]
-        public async Task EditItem(Item item)
+        public async Task EditMapPin(MapPin pin)
         {
-            if (!await CheckItemOwnership(item))
+            if (!await CheckItemOwnershipMapPin(pin))
             {
                 return;
             }
-            var itemParameter = new Dictionary<string, object>() { { "item", item } };
-            await Shell.Current.GoToAsync($"itemEdit", itemParameter);
+            var mapPinParameter = new Dictionary<string, object>() { { "mappin",pin } };
+            await Shell.Current.GoToAsync($"mapPinEdit", mapPinParameter);
         }
 
         [RelayCommand]
-        public async Task DeleteItem(Item item)
+        public async Task DeleteMapPin(MapPin pin)
         {
-            if (!await CheckItemOwnership(item))
-            {
-                return;
-            }
+            //if (!await CheckItemOwnershipMapPin(pin))
+            //{
+            //    return;
+            //}
 
             await realm.WriteAsync(() =>
             {
-                realm.Remove(item);
+                realm.Remove(pin);
             });
         }
 
@@ -148,11 +151,11 @@ namespace RealmTodo.ViewModels
             await Launcher.OpenAsync(DataExplorerLink);
         }
 
-        private async Task<bool> CheckItemOwnership(Item item)
+        private async Task<bool> CheckItemOwnershipMapPin(MapPin pin)
         {
-            if (!item.IsMine)
+            if (!pin.IsMine)
             {
-                await DialogService.ShowAlertAsync("Error", "You cannot modify items not belonging to you", "OK");
+                await DialogService.ShowAlertAsync("Error", "You cannot modify pins not belonging to you", "OK");
                 return false;
             }
 

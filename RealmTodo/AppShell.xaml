@@ -21,6 +21,13 @@
         ContentTemplate="{DataTemplate local:DogsPage}"
         Route="dogs" />
 
+    <ShellContent
+    Title="MapsList"
+    ContentTemplate="{DataTemplate local:MapsPage}"
+    Route="maps" />
+
+
+
 
 </Shell>
 

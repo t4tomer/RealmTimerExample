@@ -111,7 +111,9 @@ namespace RealmTodo.ViewModels
         private async Task GoToMainPage()
         {
             //await Shell.Current.GoToAsync($"//items");
-            await Shell.Current.GoToAsync($"//dogs");
+            //await Shell.Current.GoToAsync($"//dogs");
+            await Shell.Current.GoToAsync($"//maps");
+
 
         }
 
