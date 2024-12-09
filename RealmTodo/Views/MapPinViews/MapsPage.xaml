@@ -78,7 +78,7 @@
                                     BackgroundColor="Transparent"
                                     VerticalOptions="Center" 
                                     HorizontalOptions="End"
-                                    Command="{Binding Path=BindingContext.DeleteMapPin, Source={x:Reference mapsPage}}"
+                                    Command="{Binding Path=BindingContext.DeleteMapPinCommand, Source={x:Reference mapsPage}}"
                                     CommandParameter="{Binding .}"
                                     IsEnabled="{Binding IsMine}" />
                         </StackLayout>
