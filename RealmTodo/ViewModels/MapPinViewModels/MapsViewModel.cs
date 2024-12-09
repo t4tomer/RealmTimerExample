@@ -118,6 +118,7 @@ namespace RealmTodo.ViewModels
             //{
             //    return;
             //}
+            Console.WriteLine($"-->deleting map pin (MapsViewModel)");
 
             await realm.WriteAsync(() =>
             {

@@ -49,6 +49,29 @@ namespace RealmTodo.ViewModels
         }
 
         [RelayCommand]
+        public async Task AddItem()
+        {
+            Console.WriteLine($"-->AddItem (DogsViewModel)");
+
+            await Shell.Current.GoToAsync($"itemEdit");
+        }
+
+
+        [RelayCommand]
+        public async Task AddMapPin()
+        {
+
+            var realm = RealmService.GetMainThreadRealm();
+
+            Console.WriteLine($"-->AddMapPin (DogsViewModel)");
+
+            await Shell.Current.GoToAsync($"mapPinEdit");
+            //var editDogPage = new EditDogPage();
+            //await Shell.Current.Navigation.PushAsync(editDogPage);
+        }
+
+
+        [RelayCommand]
         public async Task Logout()
         {
             IsBusy = true;
