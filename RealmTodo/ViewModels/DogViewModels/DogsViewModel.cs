@@ -41,7 +41,6 @@ namespace RealmTodo.ViewModels
             
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
-            Items = realm.All<Item>().OrderBy(i => i.Id); //orginal code 
             Dogs = realm.All<Dog>().OrderBy(i => i.Id);
 
 
@@ -66,11 +65,10 @@ namespace RealmTodo.ViewModels
 
             var realm = RealmService.GetMainThreadRealm();
 
-            Console.WriteLine($"-->AddDog (ItemsViewModel)");
+            Console.WriteLine($"-->AddDog (DogsViewModel)");
 
             await Shell.Current.GoToAsync($"dogEdit");
-            //var editDogPage = new EditDogPage();
-            //await Shell.Current.Navigation.PushAsync(editDogPage);
+
         }
 
         [RelayCommand]
@@ -104,18 +102,6 @@ namespace RealmTodo.ViewModels
         }
 
 
-        [RelayCommand]
-        public async Task AddMapPin()
-        {
-
-            var realm = RealmService.GetMainThreadRealm();
-
-            Console.WriteLine($"-->AddMapPin (ItemsViewModel)");
-
-            await Shell.Current.GoToAsync($"mapPinEdit");
-            //var editDogPage = new EditDogPage();
-            //await Shell.Current.Navigation.PushAsync(editDogPage);
-        }
 
 
 
@@ -133,30 +119,9 @@ namespace RealmTodo.ViewModels
 
 
 
-        [RelayCommand]
-        public async Task EditItem(Item item)
-        {
-            if (!await CheckItemOwnership(item))
-            {
-                return;
-            }
-            var itemParameter = new Dictionary<string, object>() { { "item", item } };
-            await Shell.Current.GoToAsync($"itemEdit", itemParameter);
-        }
 
-        [RelayCommand]
-        public async Task DeleteItem(Item item)
-        {
-            if (!await CheckItemOwnership(item))
-            {
-                return;
-            }
 
-            await realm.WriteAsync(() =>
-            {
-                realm.Remove(item);
-            });
-        }
+     
 
         [RelayCommand]
         public void ChangeConnectionStatus()

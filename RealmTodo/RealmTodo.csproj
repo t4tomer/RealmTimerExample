@@ -63,7 +63,10 @@
 	  <Compile Update="Views\DogViews\DogsPage.xaml.cs">
 	    <DependentUpon>DogsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Views\MapPinViews\EditMapPinPage.xaml.cs">
+	  <Compile Update="Views\MapsViews\MapsPage.xaml.cs">
+	    <DependentUpon>MapsPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\MapsViews\EditMapPinPage.xaml.cs">
 	    <DependentUpon>EditMapPinPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Views\DogViews\EditDogPage.xaml.cs">
@@ -85,7 +88,10 @@
 			</SubType>
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\MapPinViews\EditMapPinPage.xaml">
+		<MauiXaml Update="Views\MapsViews\MapsPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\MapsViews\EditMapPinPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\DogViews\EditDogPage.xaml">

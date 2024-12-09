@@ -16,7 +16,7 @@
         <ToolbarItem Text="Logout" Order="Primary" IconImageSource="logout.png" Command="{Binding LogoutCommand}"/>
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
-        <vm:ItemsViewModel />
+        <vm:DogsViewModel />
     </ContentPage.BindingContext>
     <Grid>
         <Grid.RowDefinitions>
