@@ -66,65 +66,83 @@ namespace RealmTodo.Services
 
 
             
-            return mainThreadRealm ??= GetRealmForMultipleTypes();
-            //return mainThreadRealm ??= GetRealm();
+            return mainThreadRealm ??= GetRealm();
 
 
         }
 
 
-
-
-        public static Realm GetRealmForMultipleTypes()
-        {
-
-            Console.WriteLine("Adding subscriptions for both Dog and Item.");
-
-            config3 = new FlexibleSyncConfiguration(app.CurrentUser)
-            {
-                PopulateInitialSubscriptions = (realm3) =>
-                {
-                    Console.WriteLine("FlexibleSyncConfiguration-GetRealmForMultipleTypes1");
-
-                    // Add Dog subscription
-                    var (dogQuery, dogQueryName) = GetQueryForSubscriptionDogType(realm3, SubscriptionType.Mine);
-                    realm3.Subscriptions.Add(dogQuery, new SubscriptionOptions { Name = dogQueryName });
-
-                    // Add Item subscription
-                    var (itemQuery, itemQueryName) = GetQueryForSubscriptionItemType(realm3, SubscriptionType.Mine);
-                    realm3.Subscriptions.Add(itemQuery, new SubscriptionOptions { Name = itemQueryName });
-
-                    //Add MapPin subscroption 
-                    var (mapPinQuery, mapPinQueryName) = GetQueryForSubscriptionMapPinType(realm3, SubscriptionType.Mine);
-                    realm3.Subscriptions.Add(mapPinQuery, new SubscriptionOptions { Name = mapPinQueryName });
-
-
-
-                    //realm3.Subscriptions.WaitForSynchronizationAsync().Wait();
-                    Console.WriteLine("Subscriptions synchronized successfully.");                    
-
-                }
-            };
-
-            Console.WriteLine("Returning Realm with subscriptions for both Dog and Item.");
-            return Realm.GetInstance(config3);
-        }
 
 
 
         public static Realm GetRealm()
         {
-            var config = new FlexibleSyncConfiguration(app.CurrentUser)
+
+            var singleton = ObjectSingleton.Instance;
+
+            // Default type
+            Console.WriteLine($"Default type: {singleton.GetCurrentType().Name}");
+            singleton.SetDogType();
+
+            if (singleton.GetCurrentType() == typeof(MapPin))
+            {
+                Console.WriteLine($"the type is MapPin!!!");
+
+                var configPinMap = new FlexibleSyncConfiguration(app.CurrentUser)
+                {
+                    PopulateInitialSubscriptions = (realm) =>
+                    {
+                        var (query, queryName) = GetQueryForSubscriptionMapPinType(realm, SubscriptionType.Mine);
+                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+                    }
+                };
+
+                return Realm.GetInstance(configPinMap);
+
+            }
+            else if (singleton.GetCurrentType() == typeof(Dog))
+            {
+
+                Console.WriteLine($"the type is Dog!!!");
+
+                var configDog = new FlexibleSyncConfiguration(app.CurrentUser)
+                {
+                    PopulateInitialSubscriptions = (realm) =>
+                    {
+                        var (query, queryName) = GetQueryForSubscriptionDogType(realm, SubscriptionType.Mine);
+                        realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+                    }
+                };
+                return Realm.GetInstance(configDog);
+            }
+
+            Console.WriteLine($"the type is Item!!!");
+
+            var configItem = new FlexibleSyncConfiguration(app.CurrentUser)
             {
                 PopulateInitialSubscriptions = (realm) =>
                 {
-                    var (query, queryName) = GetQueryForSubscriptionType(realm, SubscriptionType.Mine);
+                    var (query, queryName) = GetQueryForSubscriptionItemType(realm, SubscriptionType.Mine);
                     realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
                 }
             };
 
-            return Realm.GetInstance(config);
+            return Realm.GetInstance(configItem);
         }
+
+        //public static Realm GetRealm()
+        //{
+        //    var config = new FlexibleSyncConfiguration(app.CurrentUser)
+        //    {
+        //        PopulateInitialSubscriptions = (realm) =>
+        //        {
+        //            var (query, queryName) = GetQueryForSubscriptionType(realm, SubscriptionType.Mine);
+        //            realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
+        //        }
+        //    };
+
+        //    return Realm.GetInstance(config);
+        //}
         private static (IQueryable<Item> Query, string Name) GetQueryForSubscriptionType(Realm realm, SubscriptionType subType)
         {
             IQueryable<Item> query = null;
@@ -159,7 +177,9 @@ namespace RealmTodo.Services
 
 
 
-            using var realm = GetRealmForMultipleTypes();
+            //using var realm = GetRealmForMultipleTypes();
+            using var realm = GetRealm();
+
             await realm.Subscriptions.WaitForSynchronizationAsync();
         }
 
