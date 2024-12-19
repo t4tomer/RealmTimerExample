@@ -6,6 +6,7 @@ using System.Text.Json;
 using Realms;
 using Realms.Sync;
 using RealmTodo.Models;
+using RealmTodo.Views;
 
 namespace RealmTodo.ViewModels
 {
@@ -68,6 +69,9 @@ namespace RealmTodo.ViewModels
         public async Task SaveDog()
         {
             Console.WriteLine($"--> SaveDog method (EditDogViewModel)");
+            //set the singlton object to mapin type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetDogType();
 
             // Get the Realm instance
             var realm = RealmService.GetMainThreadRealm();
@@ -114,6 +118,17 @@ namespace RealmTodo.ViewModels
             await Shell.Current.GoToAsync("..");
         }
 
+        [RelayCommand]
+        public async Task GoToDogList()
+        {
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetDogType();
+            var loginPage = new LoginPage();
+            loginPage.setDogType();
+            //await Shell.Current.Navigation.PushAsync(loginPage);
+
+            await Shell.Current.GoToAsync($"//list_of_dogs");
+        }
 
 
 

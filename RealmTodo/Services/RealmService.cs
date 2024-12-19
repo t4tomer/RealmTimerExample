@@ -65,7 +65,6 @@ namespace RealmTodo.Services
         {
 
 
-            
             return mainThreadRealm ??= GetRealm();
 
 
@@ -77,12 +76,8 @@ namespace RealmTodo.Services
 
         public static Realm GetRealm()
         {
-
             var singleton = ObjectSingleton.Instance;
 
-            // Default type
-            Console.WriteLine($"Default type: {singleton.GetCurrentType().Name}");
-            singleton.SetDogType();
 
             if (singleton.GetCurrentType() == typeof(MapPin))
             {
@@ -130,19 +125,6 @@ namespace RealmTodo.Services
             return Realm.GetInstance(configItem);
         }
 
-        //public static Realm GetRealm()
-        //{
-        //    var config = new FlexibleSyncConfiguration(app.CurrentUser)
-        //    {
-        //        PopulateInitialSubscriptions = (realm) =>
-        //        {
-        //            var (query, queryName) = GetQueryForSubscriptionType(realm, SubscriptionType.Mine);
-        //            realm.Subscriptions.Add(query, new SubscriptionOptions { Name = queryName });
-        //        }
-        //    };
-
-        //    return Realm.GetInstance(config);
-        //}
         private static (IQueryable<Item> Query, string Name) GetQueryForSubscriptionType(Realm realm, SubscriptionType subType)
         {
             IQueryable<Item> query = null;
@@ -177,7 +159,6 @@ namespace RealmTodo.Services
 
 
 
-            //using var realm = GetRealmForMultipleTypes();
             using var realm = GetRealm();
 
             await realm.Subscriptions.WaitForSynchronizationAsync();

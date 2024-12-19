@@ -1,9 +1,15 @@
 ﻿namespace RealmTodo.Views;
+using RealmTodo.Models;
 
 public partial class ItemsPage : ContentPage
 {
 	public ItemsPage()
 	{
-		InitializeComponent();
+        //set the singlton object to item type 
+        var singleton = ObjectSingleton.Instance;
+        singleton.SetItemType();
+        Console.WriteLine($"current type: {singleton.GetCurrentType().Name}");
+
+        InitializeComponent();
 	}
 }

@@ -26,7 +26,7 @@ namespace RealmTodo.Models
         public static ObjectSingleton Instance => _instance.Value;
 
         // Method to set type to MapPin
-        public void SetPinMapType()
+        public void SetMapPinType()
         {
             _currentType = new MapPin();
             Console.WriteLine("Object type set to MapPin.");

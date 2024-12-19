@@ -23,7 +23,7 @@
                     Text="Cancel" Command="{Binding CancelCommand}"/>
 
             <Button  BackgroundColor="Red"
-                    Text="Print" Command="{Binding PrintItemSummaryCommand}"/>
+                    Text="ListOfItems" Command="{Binding GoToItemListCommand}"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

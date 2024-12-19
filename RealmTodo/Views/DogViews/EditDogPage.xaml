@@ -21,6 +21,8 @@
             <Button  Margin="0,0,20,0" Text="OK" Command="{Binding SaveDogCommand}"/>
             <Button  BackgroundColor="#454556"
                     Text="Cancel" Command="{Binding CancelCommand}"/>
+            <Button  BackgroundColor="Purple"
+                    Text="ListOfDogs" Command="{Binding GoToDogListCommand}"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>

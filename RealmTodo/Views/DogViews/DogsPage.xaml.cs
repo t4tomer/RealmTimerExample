@@ -1,9 +1,16 @@
 ﻿namespace RealmTodo.Views;
+using RealmTodo.Models;
 
 public partial class DogsPage : ContentPage
 {
 	public DogsPage()
 	{
-		InitializeComponent();
+
+        //set the singlton object to dog type 
+        var singleton = ObjectSingleton.Instance;
+        //singleton.SetDogType();
+        Console.WriteLine($"current type: {singleton.GetCurrentType().Name}");
+
+        InitializeComponent();
 	}
 }

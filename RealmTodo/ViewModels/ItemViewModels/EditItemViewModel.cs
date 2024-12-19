@@ -60,6 +60,13 @@ namespace RealmTodo.ViewModels
             }
         }
 
+        [RelayCommand]
+        public async Task GoToItemList()
+        {
+            await Shell.Current.GoToAsync($"//list_of_items");
+        }
+
+
 
 
         [RelayCommand]
@@ -71,6 +78,11 @@ namespace RealmTodo.ViewModels
 
             try
             {
+
+                //set the singlton object to mapin type 
+                var singleton = ObjectSingleton.Instance;
+                singleton.SetItemType();
+
                 // Get the Realm instance
                 var realm = RealmService.GetMainThreadRealm();
 
@@ -103,9 +115,11 @@ namespace RealmTodo.ViewModels
         {
             Console.WriteLine($"-->SaveItem method (EditITemViewModel)");
 
-            object itemType = new Item();
-            Item newItem = new Item();
 
+
+            //set the singlton object to mapin type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetItemType();
 
             var realm = RealmService.GetMainThreadRealm();
             //this check fixed the problem of no flexibale subscrption !!!!

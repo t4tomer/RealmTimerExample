@@ -108,12 +108,58 @@ namespace RealmTodo.ViewModels
 
         private async Task GoToMainPage()
         {
-            //await Shell.Current.GoToAsync($"//items");
-            await Shell.Current.GoToAsync($"//dogs");
-            //await Shell.Current.GoToAsync($"//maps");
+
+
+            Console.WriteLine($"----$$$$$$$$$$$$$$$$$$$$$$$$>(LoginViewModel)GoToMainPage");
+            var singleton = ObjectSingleton.Instance;
+
+            //first phaze to change the objects
+            //that are seen in the list
+            //await Shell.Current.GoToAsync($"//list_of_items");
+            //await Shell.Current.GoToAsync($"//list_of_dogs");
+            await Shell.Current.GoToAsync($"//list_of_maps");
+
+
+
 
 
         }
+
+
+        //private async Task GoToMainPage()
+        //{
+        //    string setTypeList = "dogs"; // Change this value as needed
+        //    var singleton = ObjectSingleton.Instance;
+
+        //    switch (setTypeList.ToLower())
+        //    {
+        //        case "dogs":
+        //            singleton.SetDogType();
+        //            await Shell.Current.GoToAsync($"//list_of_dogs");
+
+        //            break;
+
+        //        case "items":
+        //            singleton.SetItemType();
+        //            await Shell.Current.GoToAsync($"//list_of_items");
+
+        //            break;
+
+        //        case "maps":
+        //            singleton.SetMapPinType();
+        //            await Shell.Current.GoToAsync($"//list_of_maps");
+
+        //            break;
+
+        //        default:
+        //            Console.WriteLine($"Invalid setTypeList value: {setTypeList}");
+        //            break;
+        //    }
+        //}
+
+
+
+
 
     }
 }

@@ -14,17 +14,17 @@
     <ShellContent
         Title="ItemList"
         ContentTemplate="{DataTemplate local:ItemsPage}"
-        Route="items" />
+        Route="list_of_items" />
 
     <ShellContent
         Title="DogList"
         ContentTemplate="{DataTemplate local:DogsPage}"
-        Route="dogs" />
+        Route="list_of_dogs" />
 
     <ShellContent
     Title="MapsList"
     ContentTemplate="{DataTemplate local:MapsPage}"
-    Route="maps" />
+    Route="list_of_maps" />
 
 
 

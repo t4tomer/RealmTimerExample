@@ -32,6 +32,11 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
+            //set the singlton object to item type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetItemType();
+
+
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
             Items = realm.All<Item>().OrderBy(i => i.Id);
@@ -71,6 +76,9 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddMapPin()
         {
+            //set the singlton object to mapin type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetMapPinType();
 
             var realm = RealmService.GetMainThreadRealm();
 

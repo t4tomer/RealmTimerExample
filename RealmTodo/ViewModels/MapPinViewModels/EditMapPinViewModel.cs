@@ -97,6 +97,11 @@ namespace RealmTodo.ViewModels
         {
             Console.WriteLine($"--> SaveMapPin method (MapPinSubscription)");
 
+            //set the singlton object to mapin type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetMapPinType();
+
+
             // Get the Realm instance
             var realm = RealmService.GetMainThreadRealm();
 

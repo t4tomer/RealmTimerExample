@@ -38,7 +38,10 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
-            
+            //set the singlton object to dog type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetDogType();
+
             realm = RealmService.GetMainThreadRealm();
             currentUserId = RealmService.CurrentUser.Id;
             Dogs = realm.All<Dog>().OrderBy(i => i.Id);
@@ -60,6 +63,9 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task AddMapPin()
         {
+            //set the singlton object to mapin type 
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetMapPinType();
 
             var realm = RealmService.GetMainThreadRealm();
 
