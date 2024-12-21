@@ -45,8 +45,7 @@ namespace RealmTodo.ViewModels
             //set the singlton object to dog type 
             var singleton = ObjectSingleton.Instance;
             singleton.SetDogType();
-            var loginPage = LoginPage.Instance;
-            loginPage.SetDogType();
+
 
             realm = RealmService.GetMainThreadRealm();
 
@@ -67,7 +66,7 @@ namespace RealmTodo.ViewModels
                 Console.WriteLine("Dog subscription added. Waiting for synchronization...");
 
                 // Wait for synchronization
-                //await realm.Subscriptions.WaitForSynchronizationAsync();
+                realm.Subscriptions.WaitForSynchronizationAsync();
                 Console.WriteLine("Subscriptions synchronized successfully.");
             }
             else

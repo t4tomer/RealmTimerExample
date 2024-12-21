@@ -25,7 +25,6 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Logging.AddDebug();
-        builder.Services.AddSingleton(LoginPage.Instance);
 
 #endif
 

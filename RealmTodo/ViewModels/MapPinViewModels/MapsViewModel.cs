@@ -60,7 +60,7 @@ namespace RealmTodo.ViewModels
                 Console.WriteLine("MapPin subscription added. Waiting for synchronization...");
 
                 // Wait for synchronization
-                //await realm.Subscriptions.WaitForSynchronizationAsync();
+                realm.Subscriptions.WaitForSynchronizationAsync();
                 Console.WriteLine("Subscriptions synchronized successfully.");
             }
             else

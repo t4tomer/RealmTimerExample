@@ -67,8 +67,7 @@ namespace RealmTodo.ViewModels
 
             var singleton = ObjectSingleton.Instance;
             singleton.SetItemType();
-            var loginPage = LoginPage.Instance;
-            loginPage.SetItemType();
+
 
             await Shell.Current.GoToAsync($"//list_of_items");
         }

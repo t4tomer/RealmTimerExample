@@ -110,8 +110,7 @@ namespace RealmTodo.ViewModels
         {
 
 
-            Console.WriteLine($"----$$$$$$$$$$$$$$$$$$$$$$$$>(LoginViewModel)GoToMainPage");
-            var singleton = ObjectSingleton.Instance;
+
 
             //1 phaze to change the objects
             //that are seen in the list

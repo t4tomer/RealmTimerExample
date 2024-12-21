@@ -8,11 +8,7 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
-        // to change the type of the list I need to do it through the shell . 
-        //var singleton = ObjectSingleton.Instance;
-        //singleton.SetItemType();
-        //singleton.SetDogType();
-        //singleton.SetMapPinType();
+
         Routing.RegisterRoute("login", typeof(LoginPage));
 
 

@@ -123,9 +123,6 @@ namespace RealmTodo.ViewModels
         {
             var singleton = ObjectSingleton.Instance;
             singleton.SetDogType();
-            var loginPage = LoginPage.Instance;
-            loginPage.SetDogType();
-            //await Shell.Current.Navigation.PushAsync(loginPage);
 
             await Shell.Current.GoToAsync($"//list_of_dogs");
         }
