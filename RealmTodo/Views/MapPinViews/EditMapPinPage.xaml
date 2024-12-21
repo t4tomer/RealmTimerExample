@@ -23,7 +23,7 @@
                     Text="Cancel" Command="{Binding CancelCommand}"/>
 
             <Button  BackgroundColor="Purple"
-                    Text="Print" Command="{Binding PrintMapNameCommand}"/>
+                    Text="PrintMaps" Command="{Binding GoToMapsPageCommand}"/>
 
 
         </HorizontalStackLayout>

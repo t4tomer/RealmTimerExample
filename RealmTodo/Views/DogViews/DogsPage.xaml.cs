@@ -8,9 +8,16 @@ public partial class DogsPage : ContentPage
 
         //set the singlton object to dog type 
         var singleton = ObjectSingleton.Instance;
-        //singleton.SetDogType();
-        Console.WriteLine($"current type: {singleton.GetCurrentType().Name}");
+        singleton.SetDogType();
+
+        var loginPage = LoginPage.Instance;
+        loginPage.SetDogType();
+
+        Console.WriteLine($"current type(DogsPage): {singleton.GetCurrentType().Name}");
 
         InitializeComponent();
-	}
+        singleton.SetDogType();
+
+        loginPage.SetDogType();
+    }
 }

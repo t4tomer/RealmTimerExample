@@ -10,6 +10,13 @@ public partial class ItemsPage : ContentPage
         singleton.SetItemType();
         Console.WriteLine($"current type: {singleton.GetCurrentType().Name}");
 
+        var loginPage = LoginPage.Instance;
+        loginPage.SetItemType();
+
         InitializeComponent();
-	}
+        singleton.SetItemType();
+
+        loginPage.SetItemType();
+
+    }
 }

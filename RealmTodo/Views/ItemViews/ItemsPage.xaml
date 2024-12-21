@@ -14,6 +14,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Change Connection Status" Order="Primary" IconImageSource="{Binding ConnectionStatusIcon}" Command="{Binding ChangeConnectionStatusCommand}" />
         <ToolbarItem Text="Logout" Order="Primary" IconImageSource="logout.png" Command="{Binding LogoutCommand}"/>
+        <ToolbarItem Text="Refresh" Order="Primary" IconImageSource="refresh.png" Command="{Binding RefreshCommand}"/>
+
     </ContentPage.ToolbarItems>
     <ContentPage.BindingContext>
         <vm:ItemsViewModel />

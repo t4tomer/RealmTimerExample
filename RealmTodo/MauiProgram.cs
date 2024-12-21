@@ -1,6 +1,9 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 namespace RealmTodo;
+using RealmTodo.Models;
+using RealmTodo.Views;
+
 
 public static class MauiProgram
 {
@@ -22,6 +25,8 @@ public static class MauiProgram
 
 #if DEBUG
         builder.Logging.AddDebug();
+        builder.Services.AddSingleton(LoginPage.Instance);
+
 #endif
 
         return builder.Build();

@@ -1,34 +1,59 @@
 ﻿namespace RealmTodo.Views;
+
 using RealmTodo.Models;
 
 public partial class LoginPage : ContentPage
 {
-    public LoginPage()
+    // Static instance of LoginPage
+    private static LoginPage _instance;
+
+    // Lock object for thread safety
+    private static readonly object _lock = new();
+
+    // Private constructor to prevent direct instantiation
+    private LoginPage()
     {
         Console.WriteLine($"----@@@@@@@@@@@@@@>(LoginPage)empty constructor");
 
         InitializeComponent();
+
         var singleton = ObjectSingleton.Instance;
-        //MainPage-second phaze 
-        // in order to change the type of the objects that is seen in the list
-        // you need to change the singlton type.
+        // 2 phaze to change the type of the object 
         //singleton.SetItemType();
         //singleton.SetDogType();
         singleton.SetMapPinType();
-
-
     }
 
-    public void setDogType()
+    // Public property to access the singleton instance
+    public static LoginPage Instance
     {
-        InitializeComponent();
+        get
+        {
+            if (_instance == null)
+            {
+                lock (_lock) // Ensure thread safety
+                {
+                    if (_instance == null)
+                    {
+                        _instance = new LoginPage();
+                    }
+                }
+            }
+            return _instance;
+        }
+    }
 
+    // Method to set the singleton type to Dog
+    public void SetDogType()
+    {
         var singleton = ObjectSingleton.Instance;
         singleton.SetDogType();
-
-
-
     }
 
+    public void SetItemType()
+    {
+        var singleton = ObjectSingleton.Instance;
+        singleton.SetItemType();
+    }
 
 }

@@ -6,6 +6,7 @@ using RealmTodo.Views;
 
 using Realms;
 using System.Windows.Input;
+using Realms.Sync;
 
 namespace RealmTodo.ViewModels
 {
@@ -41,10 +42,48 @@ namespace RealmTodo.ViewModels
 
 
             realm = RealmService.GetMainThreadRealm();
+
+            // Check if the subscription for MapPin  type exists
+            var mapPinSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "MapPinSubscription");
+
+            if (!mapPinSubscriptionExists)
+            {
+                Console.WriteLine("No existing subscription for Dog. Adding one now...");
+
+                // Add the subscription synchronously
+                realm.Subscriptions.Update(() =>
+                {
+                    var mapPinQuery = realm.All<MapPin>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+                    realm.Subscriptions.Add(mapPinQuery, new SubscriptionOptions { Name = "MapPinSubscription" });
+                });
+
+                Console.WriteLine("MapPin subscription added. Waiting for synchronization...");
+
+                // Wait for synchronization
+                //await realm.Subscriptions.WaitForSynchronizationAsync();
+                Console.WriteLine("Subscriptions synchronized successfully.");
+            }
+            else
+            {
+                Console.WriteLine("MapPin subscription already exists.");
+            }
+
+
+
             currentUserId = RealmService.CurrentUser.Id;
             Maps = realm.All<MapPin>().OrderBy(i => i.Id);
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
+
+            Console.WriteLine("----> Printing mapnames :");
+            foreach (var map in Maps)
+            {
+                Console.WriteLine($"Map Name: {map.Mapname}");
+            }
+
+
+
+
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
         }
 

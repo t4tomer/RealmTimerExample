@@ -6,6 +6,7 @@ using RealmTodo.Views;
 
 using Realms;
 using System.Windows.Input;
+using Realms.Sync;
 
 namespace RealmTodo.ViewModels
 {
@@ -38,12 +39,69 @@ namespace RealmTodo.ViewModels
 
 
             realm = RealmService.GetMainThreadRealm();
+
+
+            // Check if the subscription for Item type exists
+            var itemSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "ItemSubscription");
+
+            if (!itemSubscriptionExists)
+            {
+                Console.WriteLine("No existing subscription for Item. Adding one now...");
+
+                // Add the subscription synchronously
+                realm.Subscriptions.Update(() =>
+                {
+                    var itemQuery = realm.All<Item>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+                    realm.Subscriptions.Add(itemQuery, new SubscriptionOptions { Name = "ItemSubscription" });
+                });
+
+                Console.WriteLine("Item subscription added. Waiting for synchronization...");
+
+                // Wait for synchronization
+                //await realm.Subscriptions.WaitForSynchronizationAsync();
+                Console.WriteLine("Subscriptions synchronized successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Item subscription already exists.");
+            }
+
+
+
+
             currentUserId = RealmService.CurrentUser.Id;
             Items = realm.All<Item>().OrderBy(i => i.Id);
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
+
+
+            // Print the Summary of each Item
+            Console.WriteLine("----> Printing Summaries of Items:");
+            foreach (var item in Items)
+            {
+                Console.WriteLine($"Item Summary: {item.Summary}");
+            }
+
+
+
+
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
+
+
+
+
         }
+
+
+        [RelayCommand]
+        public void Refresh()
+        {
+            Console.WriteLine($"---> refreshed page (ItemsList) ");
+            OnAppearing();
+
+        }
+
+
 
         [RelayCommand]
         public async Task Logout()

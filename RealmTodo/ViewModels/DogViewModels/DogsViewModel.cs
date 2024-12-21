@@ -6,6 +6,7 @@ using RealmTodo.Views;
 
 using Realms;
 using System.Windows.Input;
+using Realms.Sync;
 
 namespace RealmTodo.ViewModels
 {
@@ -38,18 +39,75 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public void OnAppearing()
         {
+            Console.WriteLine("----> (OnAppearing-DogsViewModel 1)");
+
+
             //set the singlton object to dog type 
             var singleton = ObjectSingleton.Instance;
             singleton.SetDogType();
+            var loginPage = LoginPage.Instance;
+            loginPage.SetDogType();
 
             realm = RealmService.GetMainThreadRealm();
+
+            // Check if the subscription for Dog type exists
+            var dogSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "DogSubscription");
+
+            if (!dogSubscriptionExists)
+            {
+                Console.WriteLine("No existing subscription for Dog. Adding one now...");
+
+                // Add the subscription synchronously
+                realm.Subscriptions.Update(() =>
+                {
+                    var dogQuery = realm.All<Dog>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
+                    realm.Subscriptions.Add(dogQuery, new SubscriptionOptions { Name = "DogSubscription" });
+                });
+
+                Console.WriteLine("Dog subscription added. Waiting for synchronization...");
+
+                // Wait for synchronization
+                //await realm.Subscriptions.WaitForSynchronizationAsync();
+                Console.WriteLine("Subscriptions synchronized successfully.");
+            }
+            else
+            {
+                Console.WriteLine("Dog subscription already exists.");
+            }
+
+
+
+
             currentUserId = RealmService.CurrentUser.Id;
             Dogs = realm.All<Dog>().OrderBy(i => i.Id);
+            
+            Console.WriteLine("----> (OnAppearing-DogsViewModel 2)");
 
 
             var currentSubscriptionType = RealmService.GetCurrentSubscriptionType(realm);
+
+            // Print the Summary of each Dog
+            Console.WriteLine("----> Printing Names of Dogs:");
+            foreach (var dog in Dogs)
+            {
+                Console.WriteLine($"Dog Name: {dog.Name}");
+            }
+
+
+
+
+
             IsShowAllTasks = currentSubscriptionType == SubscriptionType.All;
         }
+
+        [RelayCommand]
+        public void Refresh()
+        {
+            Console.WriteLine($"---> refreshed page (DogsList) ");
+            OnAppearing();
+
+        }
+
 
         [RelayCommand]
         public async Task AddItem()

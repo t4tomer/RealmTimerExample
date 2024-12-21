@@ -5,6 +5,7 @@ using RealmTodo.Services;
 using System.Text.Json;
 using Realms;
 using Realms.Sync;
+using RealmTodo.Views;
 using RealmTodo.Models;
 
 namespace RealmTodo.ViewModels
@@ -63,6 +64,12 @@ namespace RealmTodo.ViewModels
         [RelayCommand]
         public async Task GoToItemList()
         {
+
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetItemType();
+            var loginPage = LoginPage.Instance;
+            loginPage.SetItemType();
+
             await Shell.Current.GoToAsync($"//list_of_items");
         }
 

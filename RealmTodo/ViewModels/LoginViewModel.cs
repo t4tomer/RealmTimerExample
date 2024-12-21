@@ -113,8 +113,9 @@ namespace RealmTodo.ViewModels
             Console.WriteLine($"----$$$$$$$$$$$$$$$$$$$$$$$$>(LoginViewModel)GoToMainPage");
             var singleton = ObjectSingleton.Instance;
 
-            //first phaze to change the objects
+            //1 phaze to change the objects
             //that are seen in the list
+            // also change the type in the login page
             //await Shell.Current.GoToAsync($"//list_of_items");
             //await Shell.Current.GoToAsync($"//list_of_dogs");
             await Shell.Current.GoToAsync($"//list_of_maps");

@@ -48,6 +48,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="Models\" />
+		<None Remove="Resources\Images\refresh.svg" />
 		<None Remove="Views\" />
 		<None Remove="ViewModels\" />
 		<None Remove="CommunityToolkit.Mvvm" />

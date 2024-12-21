@@ -107,7 +107,7 @@ namespace RealmTodo.ViewModels
 
             //this check fixed the problem of no flexibale subscrption !!!!
 
-            // Check if the subscription for Dog type exists
+            // Check if the subscription for MapPin  type exists
             var mapPinSubscriptionExists = realm.Subscriptions.Any(sub => sub.Name == "MapPinSubscription");
 
             if (!mapPinSubscriptionExists)
@@ -152,37 +152,20 @@ namespace RealmTodo.ViewModels
 
 
         [RelayCommand]
-        public async Task PrintMapName()
+        public async Task GoToMapsPage()
         {
-            Console.WriteLine("-----> PrintMapName method");
-            Console.WriteLine($"\n the current user id(PrintMapName) : {currentUserId}");
+
+            var singleton = ObjectSingleton.Instance;
+            singleton.SetMapPinType();
+            //var loginPage = LoginPage.Instance;
+            //loginPage.SetItemType();
+
+            await Shell.Current.GoToAsync($"//list_of_maps");
 
 
-            try
-            {
-                // Get the Realm instance
-                var realm = RealmService.GetMainThreadRealm();
 
-                // Fetch all items belonging to the current user
-                var pins = realm.All<MapPin>().Where(d => d.OwnerId == RealmService.CurrentUser.Id);
 
-                if (pins.Any())
-                {
-                    Console.WriteLine("Items found in Realm DB:");
-                    foreach (var pin in pins)
-                    {
-                        Console.WriteLine($"\n - {pin.Mapname}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No pins found in the Realm database for the current user.");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while fetching items: {ex.Message}");
-            }
+
         }
 
 

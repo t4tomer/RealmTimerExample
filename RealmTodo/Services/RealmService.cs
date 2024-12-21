@@ -65,7 +65,7 @@ namespace RealmTodo.Services
         {
 
 
-            return mainThreadRealm ??= GetRealm();
+            return mainThreadRealm = GetRealm();
 
 
         }
@@ -78,10 +78,11 @@ namespace RealmTodo.Services
         {
             var singleton = ObjectSingleton.Instance;
 
+            Console.WriteLine($"method -->GetRealm");
 
             if (singleton.GetCurrentType() == typeof(MapPin))
             {
-                Console.WriteLine($"the type is MapPin!!!");
+                Console.WriteLine($"(GetRealm)the type is MapPin!!!");
 
                 var configPinMap = new FlexibleSyncConfiguration(app.CurrentUser)
                 {
@@ -98,7 +99,7 @@ namespace RealmTodo.Services
             else if (singleton.GetCurrentType() == typeof(Dog))
             {
 
-                Console.WriteLine($"the type is Dog!!!");
+                Console.WriteLine($"(GetRealm)the type is Dog!!!");
 
                 var configDog = new FlexibleSyncConfiguration(app.CurrentUser)
                 {
@@ -111,7 +112,7 @@ namespace RealmTodo.Services
                 return Realm.GetInstance(configDog);
             }
 
-            Console.WriteLine($"the type is Item!!!");
+            Console.WriteLine($"(GetRealm)the type is Item!!!");
 
             var configItem = new FlexibleSyncConfiguration(app.CurrentUser)
             {
